@@ -107,11 +107,11 @@ npm install sharp                          # image optimisation (Astro uses this
 
 ### 2.3 Footer.astro
 
-- [ ] Left column: Logo + tagline
-- [ ] Middle column: Quick nav links (same as navbar)
-- [ ] Right column: Social media icon links (Instagram, YouTube, Facebook, TikTok — use SVG icons)
-- [ ] Bottom bar: `© 2026 [Trainer Name]. All Rights Reserved.`
-- [ ] All columns collapse to a single column on mobile
+- [x] Left column: Logo + tagline
+- [x] Middle column: Quick nav links (same as navbar)
+- [x] Right column: Social media icon links (Instagram, YouTube, Facebook, TikTok — use SVG icons)
+- [x] Bottom bar: `© 2026 [Trainer Name]. All Rights Reserved.`
+- [x] All columns collapse to a single column on mobile
 
 ---
 
