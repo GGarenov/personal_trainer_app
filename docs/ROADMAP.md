@@ -62,17 +62,17 @@ src/
 
 ### 1.3 Tailwind & global styles
 
-- [ ] Open `tailwind.config.mjs` and extend the theme:
+- [x] Open `tailwind.config.mjs` and extend the theme:
   - Add your brand color palette (e.g. `primary: "#E8FF00"`, `dark: "#0A0A0A"`, `surface: "#111111"`)
   - Add custom font families (see 1.4)
-- [ ] In `src/styles/global.css` add `@tailwind base/components/utilities` and set `body { background: #0A0A0A; color: #fff; }`
-- [ ] Import `global.css` inside `BaseLayout.astro`
+- [x] In `src/styles/global.css` add `@tailwind base/components/utilities` and set `body { background: #0A0A0A; color: #fff; }`
+- [x] Import `global.css` inside `BaseLayout.astro`
 
 ### 1.4 Fonts
 
-- [ ] Choose two Google Fonts (suggested: **Bebas Neue** for headings + **DM Sans** for body)
-- [ ] Add `<link>` tags in `BaseLayout.astro` `<head>`
-- [ ] Register font families in `tailwind.config.mjs` under `theme.extend.fontFamily`
+- [x] Choose two Google Fonts (suggested: **Bebas Neue** for headings + **DM Sans** for body)
+- [x] Add `<link>` tags in `BaseLayout.astro` `<head>`
+- [x] Register font families in `tailwind.config.mjs` under `theme.extend.fontFamily`
 
 ### 1.5 Install extra dependencies
 
