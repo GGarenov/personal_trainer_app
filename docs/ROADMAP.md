@@ -82,7 +82,7 @@ npm install @astrojs/rss                   # RSS feed for blog (optional)
 npm install sharp                          # image optimisation (Astro uses this)
 ```
 
-- [ ] Run the install command above
+- [x] Run the install command above
 
 ---
 
