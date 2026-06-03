@@ -1,0 +1,96 @@
+---
+import CartIcon from "../shared/CartIcon.jsx";
+
+const pathname = Astro.url.pathname;
+
+const links = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Training Programs", href: "/programs" },
+  { name: "Nutrition Plans", href: "/nutrition" },
+  { name: "Blog", href: "/blog" },
+  { name: "Contact", href: "/contact" },
+];
+
+const isActive = (href) => {
+  if (href === "/") return pathname === "/";
+  return pathname.startsWith(href);
+};
+---
+
+<header class="sticky top-0 z-50 backdrop-blur-md bg-black/70 border-b border-white/10">
+  <nav
+    aria-label="Main navigation"
+    class="mx-auto flex h-20 max-w-7xl items-center justify-between px-6"
+  >
+
+    <!-- LOGO -->
+
+    <a
+      href="/"
+      class="font-heading text-2xl font-bold tracking-wider text-white"
+    >
+      TRAINER
+    </a>
+
+    <!-- MOBILE TOGGLE -->
+
+    <input id="menu-toggle" type="checkbox" class="peer hidden" />
+
+    <label
+      for="menu-toggle"
+      class="cursor-pointer md:hidden"
+      aria-label="Toggle menu"
+    >
+      <div class="space-y-1">
+        <span class="block h-0.5 w-6 bg-white"></span>
+        <span class="block h-0.5 w-6 bg-white"></span>
+        <span class="block h-0.5 w-6 bg-white"></span>
+      </div>
+    </label>
+
+    <!-- NAV LINKS -->
+
+    <ul
+      class="
+      absolute left-0 top-20 hidden w-full flex-col
+      bg-black/95 px-6 py-6
+      peer-checked:flex
+      md:static md:flex md:w-auto md:flex-row
+      md:items-center md:gap-8 md:bg-transparent
+    "
+    >
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class={`transition-colors duration-200
+              ${
+                isActive(link.href)
+                  ? "text-primary font-semibold"
+                  : "text-white hover:text-primary"
+              }`}
+            >
+              {link.name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- RIGHT SIDE -->
+
+    <div class="hidden md:flex items-center">
+      <CartIcon client:load />
+    </div>
+
+  </nav>
+
+  <!-- MOBILE CART -->
+
+  <div class="absolute right-16 top-7 md:hidden">
+    <CartIcon client:load />
+  </div>
+
+</header>

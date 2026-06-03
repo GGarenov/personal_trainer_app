@@ -90,20 +90,20 @@ npm install sharp                          # image optimisation (Astro uses this
 
 ### 2.1 BaseLayout.astro
 
-- [ ] Create `<html lang="en">` wrapper with `<head>` (meta, title slot, fonts, global CSS) and `<body>`
-- [ ] Add `<Navbar />` at the top of `<body>`
-- [ ] Add `<slot />` in the middle
-- [ ] Add `<Footer />` at the bottom
-- [ ] Accept a `title` prop and bind it to `<title>` and `<meta name="description">`
+- [x] Create `<html lang="en">` wrapper with `<head>` (meta, title slot, fonts, global CSS) and `<body>`
+- [x] Add `<Navbar />` at the top of `<body>`
+- [x] Add `<slot />` in the middle
+- [x] Add `<Footer />` at the bottom
+- [x] Accept a `title` prop and bind it to `<title>` and `<meta name="description">`
 
 ### 2.2 Navbar.astro
 
-- [ ] Logo on the left (image or text — placeholder for now)
-- [ ] Nav links: **Home · About · Training Programs · Nutrition Plans · Blog · Contact**
-- [ ] `<CartIcon client:load />` React island on the right (shows item count badge)
-- [ ] Make the navbar **sticky** (`position: sticky; top: 0`) with a dark/blur background
-- [ ] Add a **mobile hamburger menu** (toggle with a small React island or CSS-only checkbox hack)
-- [ ] Mark active link with a highlight color using `Astro.url.pathname`
+- [x] Logo on the left (image or text — placeholder for now)
+- [x] Nav links: **Home · About · Training Programs · Nutrition Plans · Blog · Contact**
+- [x] `<CartIcon client:load />` React island on the right (shows item count badge)
+- [x] Make the navbar **sticky** (`position: sticky; top: 0`) with a dark/blur background
+- [x] Add a **mobile hamburger menu** (toggle with a small React island or CSS-only checkbox hack)
+- [x] Mark active link with a highlight color using `Astro.url.pathname`
 
 ### 2.3 Footer.astro
 
