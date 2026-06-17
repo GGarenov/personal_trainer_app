@@ -1,15 +1,24 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
-import react from '@astrojs/react';
+import react from "@astrojs/react";
+import sitemap from "@astrojs/sitemap";
+import tailwindcss from "@tailwindcss/vite";
 
-import tailwindcss from '@tailwindcss/vite';
+// Update this to your real domain before deploying
+const SITE = "https://garybean.com";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react()],
-
+  site: SITE,
+  integrations: [react(), sitemap()],
+  image: {
+    service: {
+      entrypoint: "astro/assets/services/sharp",
+      config: { limitInputPixels: false },
+    },
+  },
   vite: {
-    plugins: [tailwindcss()]
-  }
+    plugins: [tailwindcss()],
+  },
 });

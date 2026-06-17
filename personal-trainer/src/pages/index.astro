@@ -15,7 +15,11 @@ import beforeTwo from "../assets/before_two.png";
 const slides = [
   {
     before: beforeOne.src,
+    beforeWidth: beforeOne.width,
+    beforeHeight: beforeOne.height,
     after: afterOne.src,
+    afterWidth: afterOne.width,
+    afterHeight: afterOne.height,
     quote:
       "I never thought I could enjoy the gym. George's program changed everything — I'm stronger and more confident than ever.",
     name: "John Smith",
@@ -23,7 +27,11 @@ const slides = [
   },
   {
     before: beforeTwo.src,
+    beforeWidth: beforeTwo.width,
+    beforeHeight: beforeTwo.height,
     after: afterTwo.src,
+    afterWidth: afterTwo.width,
+    afterHeight: afterTwo.height,
     quote:
       "I gained muscle without living in the gym. The programming is smart, efficient, and actually sustainable.",
     name: "David Mereth",
@@ -31,7 +39,11 @@ const slides = [
   },
   {
     before: beforeThree.src,
+    beforeWidth: beforeThree.width,
+    beforeHeight: beforeThree.height,
     after: afterThree.src,
+    afterWidth: afterThree.width,
+    afterHeight: afterThree.height,
     quote:
       "The nutrition plan was simple to follow and the results spoke for themselves. Best investment I've made in myself.",
     name: "Maria Lopez",
@@ -54,7 +66,7 @@ const slides = [
       >
         CLIENT TRANSFORMATIONS
       </h2>
-      <TransformationSlider client:load slides={slides} />
+      <TransformationSlider client:visible slides={slides} />
     </section>
 
     <RecentBlogPosts />

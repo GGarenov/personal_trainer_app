@@ -31,7 +31,12 @@ const relatedPosts = allPosts
   .slice(0, 3);
 ---
 
-<BaseLayout title={`${post.data.title} — Gary Bean`} description={post.data.description}>
+<BaseLayout
+  title={`${post.data.title} — Gary Bean`}
+  description={post.data.description}
+  ogImage={cover}
+  ogType="article"
+>
   <article class="mx-auto max-w-3xl px-6 py-16 md:py-24">
     <span class="text-xs font-semibold uppercase tracking-wider text-primary">
       {post.data.category}
@@ -49,6 +54,9 @@ const relatedPosts = allPosts
       class="mt-8 w-full rounded-lg object-cover"
       widths={[640, 960, 1280]}
       sizes="(max-width: 768px) 100vw, 768px"
+      loading="eager"
+      decoding="async"
+      quality={75}
     />
 
     <div class="prose prose-invert mt-10 max-w-none space-y-5 text-white/80">

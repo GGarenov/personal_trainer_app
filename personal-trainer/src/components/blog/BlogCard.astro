@@ -25,6 +25,9 @@ const formattedDate = post.data.pubDate.toLocaleDateString("en-US", {
       class="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105"
       widths={[400, 600, 800]}
       sizes="(max-width: 768px) 100vw, 33vw"
+      loading="lazy"
+      decoding="async"
+      quality={75}
     />
   </a>
   <div class="flex flex-1 flex-col p-5">

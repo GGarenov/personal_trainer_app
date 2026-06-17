@@ -258,26 +258,142 @@ npm install sharp                          # image optimisation (Astro uses this
 
 ### 9.1 SEO
 
-- [ ] Add `<meta name="description">` to every page via `BaseLayout.astro` title prop
-- [ ] Add Open Graph tags (`og:title`, `og:description`, `og:image`) in `BaseLayout.astro`
-- [ ] Add `<link rel="canonical">` to every page
-- [ ] Create `src/pages/sitemap.xml.js` using `@astrojs/sitemap` (`npx astro add sitemap`)
-- [ ] Create `public/robots.txt`
+- [x] Add `<meta name="description">` to every page via `BaseLayout.astro` title prop
+- [x] Add Open Graph tags (`og:title`, `og:description`, `og:image`) in `BaseLayout.astro`
+- [x] Add `<link rel="canonical">` to every page
+- [x] Create `src/pages/sitemap.xml.js` using `@astrojs/sitemap` (`npx astro add sitemap`)
+- [x] Create `public/robots.txt`
 
-### 9.2 Images
+### 9.2 Images & format optimization
 
-- [ ] Replace all `<img>` tags with Astro's `<Image />` component from `astro:assets`
-- [ ] Always provide `alt` text
-- [ ] Use `width` + `height` props to prevent layout shift
-- [ ] Store all local images in `src/assets/images/`
+> **Good news:** Astro already converts images to **WebP** at build time when you use `<Image />` from `astro:assets` (powered by `sharp`). Visitors do **not** download your raw 5 MB `.jpg` / `.png` source files — they get compressed `.webp` variants.  
+> **The problem:** Huge originals (e.g. `plant_meal.jpg` at 6 MB+) still slow down **builds**, bloat the repo, and any component using a plain `<img>` tag bypasses optimization entirely.
+
+#### 9.2.1 Audit & organize source files
+
+- [x] Run a size audit on `src/assets/` — flag any file over **500 KB** for re-export or compression
+- [ ] Reorganize into subfolders (optional but recommended):
+  ```
+  src/assets/
+  ├── images/
+  │   ├── hero/
+  │   ├── programs/
+  │   ├── nutrition/
+  │   ├── blog/
+  │   └── transformations/
+  ```
+- [ ] Remove unused placeholder images (`image_one.png` … `image_seven.jpg`) once all references are migrated
+- [ ] Prefer **JPEG** for photos and **PNG** only when transparency is required (logos, graphics)
+
+#### 9.2.2 Pre-compress source assets (before commit)
+
+Source files should be reasonably sized *before* Astro processes them. Target guidelines:
+
+| Type | Max dimensions | Target file size |
+| ---- | -------------- | ---------------- |
+| Hero / banner | 1920 × 1080 | ≤ 300 KB |
+| Card / blog thumbnail | 1200 × 800 | ≤ 150 KB |
+| Before/after slide | 800 × 1000 | ≤ 120 KB |
+
+Tools (pick one):
+
+- [x] **Sharp CLI** — batch resize: `npx sharp-cli resize 1920 -- input.jpg -o output.jpg` (via `scripts/compress-assets.mjs`)
+- [ ] **Squoosh** (https://squoosh.app) — drag-and-drop, export WebP or JPEG at ~80 quality
+- [ ] **ImageOptim** (Mac) or **FileOptimizer** (Windows) — lossless/lossy batch compress
+
+- [x] Re-export oversized blog images (`training_blog_*.jpg`, `nutrition_blog_*.jpg`, etc.)
+- [x] Re-export oversized meal plan images (`plant_meal.jpg`, `weight_loss_meal_plan.jpg`, etc.)
+- [x] Re-export hero/banner assets (`banner.png`, `about_hero_image.png`) — PNG heroes are often the worst offenders
+
+#### 9.2.3 Use Astro `<Image />` everywhere (auto WebP output)
+
+- [x] Hero, program cards, blog cards, and about page already use `<Image />`
+- [x] Replace remaining plain `<img>` tags in `TransformationSlider.jsx` with optimized URLs passed from the Astro parent (or use `<Image />` in Astro and pass `src` strings from `getImage()`)
+- [x] Always provide descriptive `alt` text
+- [x] Always set `width` + `height` (or `aspect-ratio` via CSS) to prevent layout shift (CLS)
+- [x] Add `loading="lazy"` on below-the-fold images; keep `loading="eager"` only for the home hero
+- [x] Provide responsive `widths` and `sizes` props so mobile gets smaller files:
+
+```astro
+<Image
+  src={cover}
+  alt="Description"
+  widths={[400, 800, 1200]}
+  sizes="(max-width: 768px) 100vw, 50vw"
+/>
+```
+
+#### 9.2.4 Centralize image maps
+
+- [x] `src/lib/blogImages.ts` — blog cover lookup
+- [x] Create `src/lib/productImages.ts` — move image map out of `ProgramCard.astro` (same pattern as blog)
+- [x] When adding a new image: import in the lib file + reference by filename string in data/frontmatter
+
+#### 9.2.5 Optional — global quality setting
+
+In `astro.config.mjs`, lower default quality if files are still too large after source compression:
+
+```js
+export default defineConfig({
+  image: {
+    service: {
+      entrypoint: "astro/assets/services/sharp",
+      config: { limitInputPixels: false },
+    },
+  },
+});
+```
+
+Per-image quality override:
+
+```astro
+<Image src={hero} quality={75} alt="..." />
+```
+
+- [x] Tune `quality` (70–80 is usually fine for photos) after checking output in `dist/_astro/`
+
+#### 9.2.6 Verify at build time
+
+After `npm run build`, check the terminal **"generating optimized images"** section:
+
+- [x] No single WebP output over **200 KB** for card/thumbnail sizes (typical breakpoints; a few full-width variants may exceed)
+- [x] Hero WebP outputs under **400 KB**
+- [ ] Spot-check pages in Chrome DevTools → Network → Img filter → confirm `.webp` is served, not raw `.jpg`/`.png`
 
 ### 9.3 Accessibility
 
-- [ ] All interactive elements reachable by keyboard
-- [ ] Navbar has `aria-label="Main navigation"`
-- [ ] All icon-only buttons have `aria-label`
-- [ ] Color contrast ratio ≥ 4.5:1 for body text
+- [x] All interactive elements reachable by keyboard
+- [x] Navbar has `aria-label="Main navigation"`
+- [x] All icon-only buttons have `aria-label`
+- [x] Color contrast ratio ≥ 4.5:1 for body text
 - [ ] Run Lighthouse audit → fix any flagged issues
+
+### 9.4 Performance & fast loading
+
+> Goal: **PageSpeed Insights mobile score ≥ 90** (also tracked in Phase 12). Image work in 9.2 is the biggest win; these items cover the rest.
+
+#### 9.4.1 JavaScript & React islands
+
+- [x] Change `TransformationSlider` from `client:load` to `client:visible` (below the fold — no need to hydrate on first paint)
+- [x] Change `AddToCartButton` from `client:load` to `client:visible` on program/nutrition pages
+- [x] Audit: only `CartIcon` and `ContactForm` truly need `client:load`
+
+#### 9.4.2 Fonts
+
+- [x] Google Fonts loaded via `<link>` in `BaseLayout.astro`
+- [x] Add `&display=swap` (already present) and consider `font-display: swap` in CSS as fallback
+- [x] Preload only the weights actually used (currently Bebas Neue + DM Sans 400/500/700 — trim if possible)
+
+#### 9.4.3 Caching & delivery
+
+- [ ] Deploy to a CDN host (Netlify / Vercel / Cloudflare Pages) — static assets in `dist/_astro/` get long cache headers automatically
+- [ ] After deploy, confirm response headers: `cache-control` on `/_astro/*` files
+
+#### 9.4.4 Measure before and after
+
+- [ ] Run [PageSpeed Insights](https://pagespeed.web.dev/) on `/`, `/programs`, `/blog` **before** optimization — save scores
+- [ ] Re-run after completing 9.2 + 9.4 — target **LCP < 2.5 s**, **CLS < 0.1** on mobile
+- [ ] Check Chrome DevTools → Network → throttle "Fast 3G" → total page weight under **1.5 MB** on home page
 
 ---
 
@@ -348,3 +464,4 @@ npm install sharp                          # image optimisation (Astro uses this
 2. **Mobile-first** — write Tailwind classes for mobile, then override with `md:` and `lg:` prefixes.
 3. **One source of truth** — all product data (programs, prices) should live in a single `src/data/products.ts` file, not duplicated across pages.
 4. **Git discipline** — commit after completing each Phase. Suggested branch strategy: `main` → `develop` → `feature/phase-X`.
+5. **Images** — never commit multi-MB photos. Compress sources first, then let Astro's `<Image />` generate WebP. Plain `<img>` tags skip optimization entirely.

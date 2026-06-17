@@ -4,7 +4,11 @@ import useEmblaCarousel from "embla-carousel-react";
 /**
  * @typedef {Object} Slide
  * @property {string} before
+ * @property {number} beforeWidth
+ * @property {number} beforeHeight
  * @property {string} after
+ * @property {number} afterWidth
+ * @property {number} afterHeight
  * @property {string} quote
  * @property {string} name
  * @property {string} result
@@ -54,6 +58,10 @@ export default function TransformationSlider({ slides }) {
                     <img
                       src={slide.before}
                       alt={`${slide.name} before`}
+                      width={slide.beforeWidth}
+                      height={slide.beforeHeight}
+                      loading="lazy"
+                      decoding="async"
                       className="aspect-[3/4] h-full w-full object-cover"
                     />
                     <p className="mt-2 text-center text-xs font-semibold uppercase tracking-wider text-white/50">
@@ -64,6 +72,10 @@ export default function TransformationSlider({ slides }) {
                     <img
                       src={slide.after}
                       alt={`${slide.name} after`}
+                      width={slide.afterWidth}
+                      height={slide.afterHeight}
+                      loading="lazy"
+                      decoding="async"
                       className="aspect-[3/4] h-full w-full object-cover"
                     />
                     <p className="mt-2 text-center text-xs font-semibold uppercase tracking-wider text-primary">

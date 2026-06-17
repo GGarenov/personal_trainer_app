@@ -26,6 +26,9 @@ const { title, breadcrumbs, image } = Astro.props;
           class="absolute inset-0 h-full w-full object-cover"
           widths={[640, 960, 1280, 1920]}
           sizes="100vw"
+          loading="eager"
+          decoding="async"
+          quality={75}
           aria-hidden="true"
         />
         <div
