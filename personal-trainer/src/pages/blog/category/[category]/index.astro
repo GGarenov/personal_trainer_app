@@ -1,0 +1,49 @@
+---
+import BlogListing from "../../../../components/blog/BlogListing.astro";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import {
+  blogCategories,
+  type BlogCategory,
+} from "../../../../lib/blogImages";
+import {
+  getBlogPageCount,
+  getBlogPagePosts,
+  getSortedBlogPosts,
+} from "../../../../lib/blog";
+
+export async function getStaticPaths() {
+  return blogCategories.map((category) => ({
+    params: { category },
+  }));
+}
+
+const category = Astro.params.category as BlogCategory;
+const allPosts = (await getSortedBlogPosts()).filter(
+  (post) => post.data.category === category,
+);
+const lastPage = getBlogPageCount(allPosts);
+const posts = getBlogPagePosts(allPosts, 1);
+const basePath = `/blog/category/${category}`;
+---
+
+<BaseLayout
+  title={`${category} — Blog — Gary Bean`}
+  description={`${category} articles on training, nutrition, and performance.`}
+>
+  <main class="mx-auto max-w-7xl px-6 py-16 md:py-24">
+    <h1 class="font-heading text-5xl tracking-wider text-white md:text-6xl">
+      BLOG
+    </h1>
+    <p class="mt-4 max-w-2xl text-white/70">
+      Science-based insights on training, nutrition, and building lasting habits.
+    </p>
+
+    <BlogListing
+      posts={posts}
+      activeCategory={category}
+      currentPage={1}
+      lastPage={lastPage}
+      basePath={basePath}
+    />
+  </main>
+</BaseLayout>

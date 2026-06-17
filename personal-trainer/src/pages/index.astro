@@ -1,13 +1,62 @@
 ---
+import CategoryCards from "../components/home/CategoryCards.astro";
+import Hero from "../components/home/Hero.astro";
+import RecentBlogPosts from "../components/home/RecentBlogPosts.astro";
+import TransformationSlider from "../components/home/TransformationSlider.jsx";
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+import afterOne from "../assets/image_four.jpg";
+import afterThree from "../assets/image_five.jpg";
+import afterTwo from "../assets/image_one.png";
+import beforeOne from "../assets/image_two.jpg";
+import beforeThree from "../assets/image_six.jpg";
+import beforeTwo from "../assets/image_three.png";
+
+const slides = [
+  {
+    before: beforeOne.src,
+    after: afterOne.src,
+    quote:
+      "I never thought I could enjoy the gym. Gary's program changed everything — I'm stronger and more confident than ever.",
+    name: "John Smith",
+    result: "Lost 30 kg",
+  },
+  {
+    before: beforeTwo.src,
+    after: afterTwo.src,
+    quote:
+      "The nutrition plan was simple to follow and the results spoke for themselves. Best investment I've made in myself.",
+    name: "Maria Lopez",
+    result: "Lost 15 kg",
+  },
+  {
+    before: beforeThree.src,
+    after: afterThree.src,
+    quote:
+      "I gained muscle without living in the gym. The programming is smart, efficient, and actually sustainable.",
+    name: "David Chen",
+    result: "Gained 8 kg muscle",
+  },
+];
 ---
 
-<BaseLayout title="Personal Trainer">
-  <main class="mx-auto max-w-3xl px-6 py-16">
-    <h1 class="text-5xl tracking-wide text-primary">Train smarter</h1>
-    <p class="mt-4 text-lg text-white/80">
-      Body copy uses DM Sans via <code class="text-primary">font-body</code>.
-      Headings use Bebas Neue via <code class="text-primary">font-heading</code>.
-    </p>
+<BaseLayout
+  title="Gary Bean — Personal Trainer"
+  description="Science-based training and nutrition programs to transform your body."
+>
+  <main>
+    <Hero />
+    <CategoryCards />
+
+    <section class="mx-auto max-w-7xl px-6 py-20 md:py-28">
+      <h2
+        class="mb-12 text-center font-heading text-4xl tracking-wider text-white md:text-5xl"
+      >
+        CLIENT TRANSFORMATIONS
+      </h2>
+      <TransformationSlider client:load slides={slides} />
+    </section>
+
+    <RecentBlogPosts />
   </main>
 </BaseLayout>

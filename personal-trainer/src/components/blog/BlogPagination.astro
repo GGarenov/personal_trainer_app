@@ -1,0 +1,60 @@
+---
+interface Props {
+  currentPage: number;
+  lastPage: number;
+  basePath: string;
+}
+
+const { currentPage, lastPage, basePath } = Astro.props;
+
+if (lastPage <= 1) return null;
+
+const prevPath =
+  currentPage > 1
+    ? currentPage === 2
+      ? `${basePath}/`
+      : `${basePath}/page/${currentPage - 1}/`
+    : null;
+
+const nextPath =
+  currentPage < lastPage ? `${basePath}/page/${currentPage + 1}/` : null;
+---
+
+<nav
+  aria-label="Blog pagination"
+  class="mt-12 flex items-center justify-center gap-4"
+>
+  {
+    prevPath ? (
+      <a
+        href={prevPath}
+        class="rounded border border-white/20 px-4 py-2 text-sm font-semibold uppercase tracking-wider text-white/70 transition-colors hover:border-primary hover:text-primary"
+      >
+        ← Previous
+      </a>
+    ) : (
+      <span class="rounded border border-white/10 px-4 py-2 text-sm text-white/30">
+        ← Previous
+      </span>
+    )
+  }
+
+  <span class="text-sm text-white/50">
+    Page {currentPage} of {lastPage}
+  </span>
+
+  {
+    nextPath ? (
+      <a
+        href={nextPath}
+        class="rounded border border-white/20 px-4 py-2 text-sm font-semibold uppercase tracking-wider text-white/70 transition-colors hover:border-primary hover:text-primary"
+      >
+        Next →
+      </a>
+    ) : (
+      <span class="rounded border border-white/10 px-4 py-2 text-sm text-white/30">
+        Next →
+      </span>
+    )
+  }
+</nav>

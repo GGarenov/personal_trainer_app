@@ -23,3 +23,19 @@
     @apply font-heading;
   }
 }
+
+@layer utilities {
+  .scroll-arrow {
+    animation: bounce-down 2s ease-in-out infinite;
+  }
+}
+
+@keyframes bounce-down {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 8px);
+  }
+}

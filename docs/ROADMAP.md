@@ -119,38 +119,38 @@ npm install sharp                          # image optimisation (Astro uses this
 
 ### 3.1 Hero section (`Hero.astro`)
 
-- [ ] Full-width, full-height section with a **background image** (trainer photo — placeholder for now)
-- [ ] Dark overlay gradient on top of the image
-- [ ] Large heading (e.g. `TRANSFORM YOUR BODY`) using the display font
-- [ ] Subheading (e.g. `Science-based training & nutrition programs`)
-- [ ] Primary CTA button: **"View Programs"** → links to `/programs`
-- [ ] Subtle scroll-down arrow animation at the bottom
+- [x] Full-width, full-height section with a **background image** (trainer photo — placeholder for now)
+- [x] Dark overlay gradient on top of the image
+- [x] Large heading (e.g. `TRANSFORM YOUR BODY`) using the display font
+- [x] Subheading (e.g. `Science-based training & nutrition programs`)
+- [x] Primary CTA button: **"View Programs"** → links to `/programs`
+- [x] Subtle scroll-down arrow animation at the bottom
 
 ### 3.2 Category cards (`CategoryCards.astro`)
 
-- [ ] Two side-by-side clickable cards
+- [x] Two side-by-side clickable cards
   - Card 1 → **Training Programs** image + title + arrow → `/programs`
   - Card 2 → **Nutrition Plans** image + title + arrow → `/nutrition`
-- [ ] On hover: image zooms slightly, overlay darkens
-- [ ] On mobile: stack vertically
+- [x] On hover: image zooms slightly, overlay darkens
+- [x] On mobile: stack vertically
 
 ### 3.3 Transformation slider (`TransformationSlider.jsx`) — React island
 
-- [ ] Install a slider lib: `npm install embla-carousel-react` (or use a CSS-only carousel)
-- [ ] Each slide contains:
+- [x] Install a slider lib: `npm install embla-carousel-react` (or use a CSS-only carousel)
+- [x] Each slide contains:
   - Side-by-side **Before / After** photos (use `<img>` with `object-fit: cover`)
   - Client quote in italic
   - Client name + result (e.g. _"John Smith – Lost 30 kg"_)
-- [ ] Auto-play every 5 seconds
-- [ ] Prev/Next arrow buttons + dot indicators
-- [ ] Add `client:load` when using the island in the `.astro` parent
+- [x] Auto-play every 5 seconds
+- [x] Prev/Next arrow buttons + dot indicators
+- [x] Add `client:load` when using the island in the `.astro` parent
 
 ### 3.4 Recent blog posts (`RecentBlogPosts.astro`)
 
-- [ ] Fetch the 3 latest posts from the Content Collection
-- [ ] Display as a 3-column card grid (1-col on mobile)
-- [ ] Each card: thumbnail image, category tag, title, date, short excerpt, "Read More" link
-- [ ] Section heading: **"Latest from the Blog"** with a "View All" link → `/blog`
+- [x] Fetch the 3 latest posts from the Content Collection
+- [x] Display as a 3-column card grid (1-col on mobile)
+- [x] Each card: thumbnail image, category tag, title, date, short excerpt, "Read More" link
+- [x] Section heading: **"Latest from the Blog"** with a "View All" link → `/blog`
 
 ---
 
@@ -158,20 +158,20 @@ npm install sharp                          # image optimisation (Astro uses this
 
 ### 4.1 Hero banner
 
-- [ ] Full-width banner with trainer photo (different from home hero)
-- [ ] Overlaid name + tagline
+- [x] Full-width banner with trainer photo (different from home hero)
+- [x] Overlaid name + tagline
 
 ### 4.2 Story section
 
-- [ ] Left: portrait photo of the trainer
-- [ ] Right: long-form "My Story" text (placeholder copy — replace with real content later)
-- [ ] Include stats bar (e.g. `10+ Years Experience · 200+ Clients Transformed · 3 World Records`)
-- [ ] On mobile: stack photo above text
+- [x] Center photo banner (`about_hero_image.png`) above story text
+- [x] Long-form "My Story" text (placeholder copy — replace with real content later)
+- [x] Include stats bar (e.g. `10+ Years Experience · 200+ Clients Transformed · 3 World Records`)
+- [x] On mobile: stack photo above text
 
 ### 4.3 Certifications / credentials strip
 
-- [ ] Horizontal row of certification logos or text badges (ISSA, NASM, etc.)
-- [ ] Greyscale by default, full-color on hover
+- [x] Horizontal row of certification logos or text badges (ISSA, NASM, etc.)
+- [x] Greyscale by default, full-color on hover
 
 ---
 
@@ -179,24 +179,24 @@ npm install sharp                          # image optimisation (Astro uses this
 
 ### 5.1 Page hero
 
-- [ ] Short hero banner with heading **"Training Programs"** and a breadcrumb
+- [x] Short hero banner with heading **"Training Programs"** and a breadcrumb
 
 ### 5.2 Program cards (reuse `ProgramCard.astro`)
 
-- [ ] 2-column grid (1-col on mobile)
-- [ ] Each card:
+- [x] 2-column grid (1-col on mobile)
+- [x] Each card:
   - Program photo / cover image
   - Program name
   - Short description (3–4 bullet points of what's included)
   - Price (e.g. `€49`)
   - **"Add to Cart"** button → React island to trigger cart store
-- [ ] Add a small "Most Popular" badge on one program
+- [x] Add a small "Most Popular" badge on one program
 
 ### 5.3 Cart store (`src/store/cart.js`)
 
-- [ ] Use `nanostores` atom to hold `{ items: [], total: 0 }`
-- [ ] Export `addItem(product)`, `removeItem(id)`, `clearCart()` helpers
-- [ ] `CartIcon.jsx` reads from store and shows item count badge
+- [x] Use `nanostores` atom to hold `{ items: [], total: 0 }`
+- [x] Export `addItem(product)`, `removeItem(id)`, `clearCart()` helpers
+- [x] `CartIcon.jsx` reads from store and shows item count badge
 
 ---
 
@@ -204,52 +204,34 @@ npm install sharp                          # image optimisation (Astro uses this
 
 ### 6.1 Layout
 
-- [ ] Mirror the Training Programs page exactly
-- [ ] Different hero image
-- [ ] Different plan cards (e.g. "Weight Loss Meal Plan", "Muscle Gain Meal Plan")
-- [ ] Same `ProgramCard.astro` component — just pass different props
+- [x] Mirror the Training Programs page exactly
+- [x] Different hero image
+- [x] Different plan cards (e.g. "Weight Loss Meal Plan", "Muscle Gain Meal Plan")
+- [x] Same `ProgramCard.astro` component — just pass different props
 
 ---
 
 ## PHASE 7 — Blog
 
-### 7.1 Content Collections setup (`src/content/config.ts`)
+### 7.1 Content Collections setup (`src/content.config.ts`)
 
-```ts
-import { defineCollection, z } from "astro:content";
+- [x] Add the config (Astro 6 Content Layer API with `glob` loader)
+- [x] Create 3–5 placeholder `.md` blog posts under `src/content/blog/`
+- [x] Each file: frontmatter matching the schema + placeholder body text
 
-const blog = defineCollection({
-  schema: z.object({
-    title: z.string(),
-    pubDate: z.date(),
-    description: z.string(),
-    author: z.string(),
-    image: z.string(),
-    category: z.enum(["Training", "Nutrition", "Mindset", "Transformations"]),
-    tags: z.array(z.string()),
-  }),
-});
+### 7.2 Blog index page (`src/pages/blog/[...page].astro`)
 
-export const collections = { blog };
-```
-
-- [ ] Add the config above
-- [ ] Create 3–5 placeholder `.md` blog posts under `src/content/blog/`
-- [ ] Each file: frontmatter matching the schema + placeholder body text
-
-### 7.2 Blog index page (`src/pages/blog/index.astro`)
-
-- [ ] Fetch all posts, sort by date descending
-- [ ] Category filter tabs (All / Training / Nutrition / Mindset / Transformations)
-- [ ] Responsive grid of `BlogCard.astro` components
-- [ ] Pagination (show 6 per page) — use Astro's `paginate()` helper
+- [x] Fetch all posts, sort by date descending
+- [x] Category filter tabs (All / Training / Nutrition / Mindset / Transformations)
+- [x] Responsive grid of `BlogCard.astro` components
+- [x] Pagination (show 6 per page) — use Astro's `paginate()` helper
 
 ### 7.3 Blog post page (`src/pages/blog/[slug].astro`)
 
-- [ ] Dynamic route using `getStaticPaths()` from Content Collections
-- [ ] Render `<Content />` (Markdown body)
-- [ ] Show: title, author, date, category tag, cover image
-- [ ] Related posts section at the bottom (same category, max 3)
+- [x] Dynamic route using `getStaticPaths()` from Content Collections
+- [x] Render `<Content />` (Markdown body)
+- [x] Show: title, author, date, category tag, cover image
+- [x] Related posts section at the bottom (same category, max 3)
 
 ---
 
@@ -257,18 +239,18 @@ export const collections = { blog };
 
 ### 8.1 Layout
 
-- [ ] Two-column layout: left = contact info, right = form (1-col on mobile)
-- [ ] Left side: email, social links, location (optional)
+- [x] Two-column layout: left = contact info, right = form (1-col on mobile)
+- [x] Left side: email, social links, location (optional)
 
 ### 8.2 Contact form (`ContactForm.jsx`) — React island
 
-- [ ] Fields: **Name · Email · Subject · Message**
-- [ ] Client-side validation (required fields, valid email format)
-- [ ] On submit: POST to a form endpoint
+- [x] Fields: **Name · Email · Subject · Message**
+- [x] Client-side validation (required fields, valid email format)
+- [x] On submit: POST to a form endpoint
   - Option A (simple): Use **Netlify Forms** (`netlify` attribute on form)
   - Option B: Use **Formspree** (free tier) — `https://formspree.io/f/YOUR_ID`
-- [ ] Show success / error message after submission
-- [ ] Add `client:load` in the parent `.astro` file
+- [x] Show success / error message after submission
+- [x] Add `client:load` in the parent `.astro` file
 
 ---
 

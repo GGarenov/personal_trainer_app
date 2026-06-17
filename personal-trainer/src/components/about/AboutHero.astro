@@ -1,0 +1,20 @@
+---
+import { Image } from "astro:assets";
+import heroImage from "../../assets/about_hero_image.png";
+---
+
+<section class="w-full overflow-hidden bg-dark">
+  <Image
+    src={heroImage}
+    alt="Gary Bean — personal trainer and strength coach"
+    class="mx-auto w-full max-h-[70vh] object-contain object-center"
+    widths={[640, 960, 1280, 1920]}
+    sizes="100vw"
+  />
+  <div class="px-6 pb-12 pt-4 text-center md:pb-16">
+    <h1 class="sr-only">Gary Bean</h1>
+    <p class="mx-auto max-w-xl text-lg text-white/80 md:text-xl">
+      Science-based training &amp; nutrition for lasting transformation
+    </p>
+  </div>
+</section>

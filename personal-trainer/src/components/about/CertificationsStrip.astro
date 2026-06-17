@@ -1,0 +1,42 @@
+---
+const certifications = [
+  { abbr: "ISSA", name: "International Sports Sciences Association" },
+  { abbr: "NASM", name: "National Academy of Sports Medicine" },
+  { abbr: "ACE", name: "American Council on Exercise" },
+  { abbr: "CSCS", name: "Certified Strength & Conditioning Specialist" },
+  { abbr: "PN", name: "Precision Nutrition Level 1" },
+];
+---
+
+<section class="border-t border-white/10 bg-surface py-14 md:py-16">
+  <div class="mx-auto max-w-5xl px-6">
+    <h2
+      class="mb-10 text-center font-heading text-3xl tracking-wider text-white md:text-4xl"
+    >
+      CERTIFICATIONS &amp; CREDENTIALS
+    </h2>
+
+    <ul
+      class="flex flex-wrap items-center justify-center gap-6 md:gap-10"
+      role="list"
+    >
+      {
+        certifications.map((cert) => (
+          <li>
+            <div
+              class="group flex h-20 w-28 cursor-default flex-col items-center justify-center rounded-lg border border-white/10 bg-dark/50 px-3 transition-all duration-300 grayscale hover:grayscale-0 hover:border-primary/40 md:h-24 md:w-32"
+              title={cert.name}
+            >
+              <span class="font-heading text-2xl tracking-wider text-white/50 transition-colors duration-300 group-hover:text-primary md:text-3xl">
+                {cert.abbr}
+              </span>
+              <span class="mt-1 text-center text-[10px] leading-tight text-white/30 transition-colors duration-300 group-hover:text-white/70 md:text-xs">
+                {cert.name}
+              </span>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

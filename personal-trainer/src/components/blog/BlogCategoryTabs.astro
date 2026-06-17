@@ -1,0 +1,40 @@
+---
+import type { BlogCategory } from "../../lib/blogImages";
+
+interface Props {
+  activeCategory?: BlogCategory | "All";
+}
+
+const { activeCategory = "All" } = Astro.props;
+
+const tabs: { label: string; href: string; key: BlogCategory | "All" }[] = [
+  { label: "All", href: "/blog/", key: "All" },
+  { label: "Training", href: "/blog/category/Training/", key: "Training" },
+  { label: "Nutrition", href: "/blog/category/Nutrition/", key: "Nutrition" },
+  { label: "Mindset", href: "/blog/category/Mindset/", key: "Mindset" },
+  {
+    label: "Transformations",
+    href: "/blog/category/Transformations/",
+    key: "Transformations",
+  },
+];
+---
+
+<nav aria-label="Filter posts by category" class="mt-10 flex flex-wrap gap-2">
+  {
+    tabs.map((tab) => (
+      <a
+        href={tab.href}
+        class:list={[
+          "rounded-full border px-4 py-2 text-sm font-semibold uppercase tracking-wider transition-colors",
+          activeCategory === tab.key
+            ? "border-primary bg-primary text-dark"
+            : "border-white/20 text-white/70 hover:border-primary hover:text-primary",
+        ]}
+        aria-current={activeCategory === tab.key ? "page" : undefined}
+      >
+        {tab.label}
+      </a>
+    ))
+  }
+</nav>

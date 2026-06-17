@@ -1,0 +1,32 @@
+---
+import ProgramCard from "../components/shared/ProgramCard.astro";
+import PageHero from "../components/shared/PageHero.astro";
+import { trainingPrograms } from "../data/products";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Training Programs — Gary Bean"
+  description="Science-based training programs for strength, hypertrophy, and powerlifting."
+>
+  <main>
+    <PageHero
+      title="Training Programs"
+      breadcrumbs={[
+        { label: "Home", href: "/" },
+        { label: "Training Programs" },
+      ]}
+    />
+
+    <section class="mx-auto max-w-7xl px-6 py-16 md:py-24">
+      <p class="mb-12 max-w-2xl text-lg text-white/70">
+        Structured programs built on progressive overload and evidence-based
+        programming — pick the plan that matches your goal and experience level.
+      </p>
+
+      <div class="grid gap-8 md:grid-cols-2">
+        {trainingPrograms.map((program) => <ProgramCard program={program} />)}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
