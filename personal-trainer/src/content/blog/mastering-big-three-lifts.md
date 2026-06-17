@@ -3,7 +3,7 @@ title: "Mastering the Big Three Lifts"
 pubDate: 2026-04-02
 description: "Squat, bench, and deadlift form cues that fix the mistakes holding most lifters back."
 author: "Gary Bean"
-image: "image_seven.jpg"
+image: "training_blog_one.jpg"
 category: "Training"
 tags: ["squat", "bench-press", "deadlift", "technique"]
 ---

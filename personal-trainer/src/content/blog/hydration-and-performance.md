@@ -3,7 +3,7 @@ title: "Hydration and Performance"
 pubDate: 2026-02-18
 description: "Even mild dehydration can tank your strength — here's a practical hydration plan for lifters."
 author: "Gary Bean"
-image: "image_two.jpg"
+image: "nutrition_blog_three.jpg"
 category: "Nutrition"
 tags: ["hydration", "performance", "recovery"]
 ---

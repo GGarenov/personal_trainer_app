@@ -1,23 +1,37 @@
 import type { ImageMetadata } from "astro";
 
-import aboutHeroImage from "../assets/about_hero_image.png";
-import imageFive from "../assets/image_five.jpg";
-import imageFour from "../assets/image_four.jpg";
-import imageOne from "../assets/image_one.png";
-import imageSeven from "../assets/image_seven.jpg";
-import imageSix from "../assets/image_six.jpg";
-import imageThree from "../assets/image_three.png";
-import imageTwo from "../assets/image_two.jpg";
+import mindsetBlogFour from "../assets/mindset_blog_four.jpg";
+import mindsetBlogOne from "../assets/mindset_blog_one.jpg";
+import mindsetBlogThree from "../assets/mindset_blog_three.jpg";
+import mindsetBlogTwo from "../assets/mindset_blog_two.jpg";
+import nutritionBlogFour from "../assets/nutrition_blog_four.jpg";
+import nutritionBlogOne from "../assets/nutrition_blog_one.jpg";
+import nutritionBlogThree from "../assets/nutrition_blog_three.jpg";
+import nutritionBlogTwo from "../assets/nutrition_blog_two.jpg";
+import trainingBlogFour from "../assets/training_blog_four.jpg";
+import trainingBlogOne from "../assets/training_blog_one.jpg";
+import trainingBlogThree from "../assets/training_blog_three.jpg";
+import trainingBlogTwo from "../assets/training_blog_two.jpg";
+import transformationBlogOne from "../assets/transformation_blog_one.jpg";
+import transformationBlogThree from "../assets/transformation_blog_three.jpg";
+import transformationBlogTwo from "../assets/transformation_blog_two.jpg";
 
 export const blogImageMap: Record<string, ImageMetadata> = {
-  "about_hero_image.png": aboutHeroImage,
-  "image_one.png": imageOne,
-  "image_two.jpg": imageTwo,
-  "image_three.png": imageThree,
-  "image_four.jpg": imageFour,
-  "image_five.jpg": imageFive,
-  "image_six.jpg": imageSix,
-  "image_seven.jpg": imageSeven,
+  "training_blog_one.jpg": trainingBlogOne,
+  "training_blog_two.jpg": trainingBlogTwo,
+  "training_blog_three.jpg": trainingBlogThree,
+  "training_blog_four.jpg": trainingBlogFour,
+  "nutrition_blog_one.jpg": nutritionBlogOne,
+  "nutrition_blog_two.jpg": nutritionBlogTwo,
+  "nutrition_blog_three.jpg": nutritionBlogThree,
+  "nutrition_blog_four.jpg": nutritionBlogFour,
+  "mindset_blog_one.jpg": mindsetBlogOne,
+  "mindset_blog_two.jpg": mindsetBlogTwo,
+  "mindset_blog_three.jpg": mindsetBlogThree,
+  "mindset_blog_four.jpg": mindsetBlogFour,
+  "transformation_blog_one.jpg": transformationBlogOne,
+  "transformation_blog_two.jpg": transformationBlogTwo,
+  "transformation_blog_three.jpg": transformationBlogThree,
 };
 
 export const blogCategories = [
@@ -30,5 +44,5 @@ export const blogCategories = [
 export type BlogCategory = (typeof blogCategories)[number];
 
 export function getBlogCover(image: string): ImageMetadata {
-  return blogImageMap[image] ?? imageOne;
+  return blogImageMap[image] ?? trainingBlogOne;
 }

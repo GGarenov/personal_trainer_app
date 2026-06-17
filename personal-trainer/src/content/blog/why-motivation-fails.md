@@ -3,7 +3,7 @@ title: "Why Motivation Fails (And What Works Instead)"
 pubDate: 2026-01-10
 description: "Motivation is unreliable. Systems, environment design, and accountability are what keep you showing up."
 author: "Gary Bean"
-image: "image_four.jpg"
+image: "mindset_blog_three.jpg"
 category: "Mindset"
 tags: ["habits", "discipline", "mindset"]
 ---

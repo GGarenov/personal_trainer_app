@@ -3,7 +3,7 @@ title: "Carb Cycling Explained Simply"
 pubDate: 2026-03-20
 description: "Match your carbs to your training days without overcomplicating your diet."
 author: "Gary Bean"
-image: "image_three.png"
+image: "nutrition_blog_one.jpg"
 category: "Nutrition"
 tags: ["carbs", "diet", "fat-loss"]
 ---

@@ -5,37 +5,37 @@ import RecentBlogPosts from "../components/home/RecentBlogPosts.astro";
 import TransformationSlider from "../components/home/TransformationSlider.jsx";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-import afterOne from "../assets/image_four.jpg";
-import afterThree from "../assets/image_five.jpg";
-import afterTwo from "../assets/image_one.png";
-import beforeOne from "../assets/image_two.jpg";
-import beforeThree from "../assets/image_six.jpg";
-import beforeTwo from "../assets/image_three.png";
+import afterOne from "../assets/after_one.png";
+import afterThree from "../assets/after_three.png";
+import afterTwo from "../assets/after_two.png";
+import beforeOne from "../assets/before_one.png";
+import beforeThree from "../assets/before_three.png";
+import beforeTwo from "../assets/before_two.png";
 
 const slides = [
   {
     before: beforeOne.src,
     after: afterOne.src,
     quote:
-      "I never thought I could enjoy the gym. Gary's program changed everything — I'm stronger and more confident than ever.",
+      "I never thought I could enjoy the gym. George's program changed everything — I'm stronger and more confident than ever.",
     name: "John Smith",
-    result: "Lost 30 kg",
+    result: "Lost 15 kg",
   },
   {
     before: beforeTwo.src,
     after: afterTwo.src,
     quote:
-      "The nutrition plan was simple to follow and the results spoke for themselves. Best investment I've made in myself.",
-    name: "Maria Lopez",
-    result: "Lost 15 kg",
+      "I gained muscle without living in the gym. The programming is smart, efficient, and actually sustainable.",
+    name: "David Mereth",
+    result: "Lost 35 kg",
   },
   {
     before: beforeThree.src,
     after: afterThree.src,
     quote:
-      "I gained muscle without living in the gym. The programming is smart, efficient, and actually sustainable.",
-    name: "David Chen",
-    result: "Gained 8 kg muscle",
+      "The nutrition plan was simple to follow and the results spoke for themselves. Best investment I've made in myself.",
+    name: "Maria Lopez",
+    result: "Lost 8 kg muscle",
   },
 ];
 ---

@@ -3,7 +3,7 @@ title: "Training With a Busy Schedule"
 pubDate: 2026-01-28
 description: "Three full-body sessions per week can outperform six half-hearted workouts — if you train with intent."
 author: "Gary Bean"
-image: "image_one.png"
+image: "mindset_blog_two.jpg"
 category: "Mindset"
 tags: ["time-management", "habits", "full-body"]
 ---

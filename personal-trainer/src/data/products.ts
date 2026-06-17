@@ -64,7 +64,7 @@ export const nutritionPlans: Product[] = [
     id: "weight-loss-meal-plan",
     name: "Weight Loss Meal Plan",
     price: 45,
-    image: "image_three.png",
+    image: "weight_loss_meal_plan.jpg",
     features: [
       "12-week calorie-controlled meal plan",
       "Macro targets adjusted weekly",
@@ -77,7 +77,7 @@ export const nutritionPlans: Product[] = [
     id: "muscle-gain-meal-plan",
     name: "Muscle Gain Meal Plan",
     price: 55,
-    image: "image_two.jpg",
+    image: "muscle_gain.jpg",
     features: [
       "16-week high-protein meal structure",
       "Calorie surplus progression guide",
@@ -89,7 +89,7 @@ export const nutritionPlans: Product[] = [
     id: "balanced-maintenance-plan",
     name: "Balanced Maintenance Plan",
     price: 39,
-    image: "image_one.png",
+    image: "balanced_meal.jpg",
     features: [
       "Flexible 8-week maintenance framework",
       "No restrictive food rules",
@@ -101,7 +101,7 @@ export const nutritionPlans: Product[] = [
     id: "plant-based-performance",
     name: "Plant-Based Performance Plan",
     price: 49,
-    image: "image_five.jpg",
+    image: "plant_meal.jpg",
     features: [
       "10-week vegan high-protein plan",
       "Complete amino acid pairing guide",

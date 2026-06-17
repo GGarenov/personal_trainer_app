@@ -3,7 +3,7 @@ title: "When and How to Deload"
 pubDate: 2026-02-10
 description: "Deloads aren't lazy weeks — they're a programmed tool to recover, adapt, and come back stronger."
 author: "Gary Bean"
-image: "image_six.jpg"
+image: "training_blog_four.jpg"
 category: "Training"
 tags: ["recovery", "programming", "deload"]
 ---
