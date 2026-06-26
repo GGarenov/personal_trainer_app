@@ -1,6 +1,8 @@
 ---
 import BlogListing from "../../../components/blog/BlogListing.astro";
+import PageHero from "../../../components/shared/PageHero.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import heroBlogImage from "../../../assets/blog_banner.jpg";
 import {
   getBlogPageCount,
   getBlogPagePosts,
@@ -26,20 +28,27 @@ const posts = getBlogPagePosts(allPosts, currentPage);
   title={`Blog — Page ${currentPage} — Gary Bean`}
   description="Training, nutrition, mindset, and transformation articles."
 >
-  <main class="mx-auto max-w-7xl px-6 py-16 md:py-24">
-    <h1 class="font-heading text-5xl tracking-wider text-white md:text-6xl">
-      BLOG
-    </h1>
-    <p class="mt-4 max-w-2xl text-white/70">
-      Science-based insights on training, nutrition, and building lasting habits.
-    </p>
-
-    <BlogListing
-      posts={posts}
-      activeCategory="All"
-      currentPage={currentPage}
-      lastPage={lastPage}
-      basePath="/blog"
+  <main>
+    <PageHero
+      title="Blog"
+      image={heroBlogImage}
+      imageClass="object-contain object-center"
+      heroClass="min-h-[30vh] md:min-h-[34vh]"
+      overlayClass="bg-gradient-to-t from-dark/90 via-dark/25 to-transparent"
     />
+
+    <section class="mx-auto max-w-7xl px-6 py-16 md:py-24">
+      <p class="mb-12 max-w-2xl text-lg text-white/70">
+        Science-based insights on training, nutrition, and building lasting habits.
+      </p>
+
+      <BlogListing
+        posts={posts}
+        activeCategory="All"
+        currentPage={currentPage}
+        lastPage={lastPage}
+        basePath="/blog"
+      />
+    </section>
   </main>
 </BaseLayout>

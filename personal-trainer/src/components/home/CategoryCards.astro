@@ -1,20 +1,22 @@
 ---
 import { Image } from "astro:assets";
-import trainingImage from "../../assets/image_six.jpg";
-import nutritionImage from "../../assets/meal_prep.jpg";
+import trainingImage from "../../assets/home_image_training_program.png";
+import nutritionImage from "../../assets/home_image_nutrition_program.png";
 
 const cards = [
   {
     title: "Training Programs",
     href: "/programs",
     image: trainingImage,
-    alt: "Barbell deadlift — training programs",
+    alt: "Personal trainer in the gym — training programs",
+    imageClass: "object-top",
   },
   {
     title: "Nutrition Plans",
     href: "/nutrition",
     image: nutritionImage,
     alt: "Healthy meal prep — nutrition plans",
+    imageClass: "object-center",
   },
 ];
 ---
@@ -30,7 +32,7 @@ const cards = [
           <Image
             src={card.image}
             alt={card.alt}
-            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            class={`h-full w-full object-cover ${card.imageClass} transition-transform duration-500 group-hover:scale-105`}
             widths={[480, 640, 960]}
             sizes="(max-width: 768px) 100vw, 50vw"
             loading="lazy"

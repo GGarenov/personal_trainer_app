@@ -9,21 +9,42 @@ interface Breadcrumb {
 
 interface Props {
   title: string;
-  breadcrumbs: Breadcrumb[];
+  breadcrumbs?: Breadcrumb[];
   image?: ImageMetadata;
+  imageClass?: string;
+  overlayClass?: string;
+  heroClass?: string;
 }
 
-const { title, breadcrumbs, image } = Astro.props;
+const {
+  title,
+  breadcrumbs,
+  image,
+  imageClass = "object-cover object-center",
+  overlayClass = "bg-gradient-to-r from-dark via-dark/90 to-dark/70",
+  heroClass = "",
+} = Astro.props;
+
+const defaultHeroHeight = "min-h-[45vh] md:min-h-[50vh]";
+const resolvedHeroHeight = heroClass || defaultHeroHeight;
 ---
 
-<section class="relative overflow-hidden border-b border-white/10 bg-surface">
+<section
+  class:list={[
+    "relative overflow-hidden border-b border-white/10 bg-surface",
+    image && resolvedHeroHeight,
+  ]}
+>
   {
     image && (
       <>
         <Image
           src={image}
           alt=""
-          class="absolute inset-0 h-full w-full object-cover"
+          class:list={[
+            "absolute inset-0 h-full w-full",
+            imageClass,
+          ]}
           widths={[640, 960, 1280, 1920]}
           sizes="100vw"
           loading="eager"
@@ -32,35 +53,49 @@ const { title, breadcrumbs, image } = Astro.props;
           aria-hidden="true"
         />
         <div
-          class="absolute inset-0 bg-gradient-to-r from-dark via-dark/90 to-dark/70"
+          class:list={["absolute inset-0", overlayClass]}
           aria-hidden="true"
         />
       </>
     )
   }
-  <div class="relative mx-auto max-w-7xl px-6 py-12 md:py-16">
-    <nav aria-label="Breadcrumb" class="mb-4">
-      <ol class="flex flex-wrap items-center gap-2 text-sm text-white/50">
-        {
-          breadcrumbs.map((crumb, index) => (
-            <li class="flex items-center gap-2">
-              {index > 0 && <span aria-hidden="true">/</span>}
-              {crumb.href ? (
-                <a
-                  href={crumb.href}
-                  class="transition-colors hover:text-primary"
-                >
-                  {crumb.label}
-                </a>
-              ) : (
-                <span class="text-white/80">{crumb.label}</span>
-              )}
-            </li>
-          ))
-        }
-      </ol>
-    </nav>
-    <h1 class="font-heading text-5xl tracking-wider text-white md:text-6xl">
+  <div
+    class:list={[
+      "relative mx-auto max-w-7xl px-6 py-12 md:py-16",
+      image && ["flex flex-col justify-end", resolvedHeroHeight],
+    ]}
+  >
+    {
+      breadcrumbs && breadcrumbs.length > 0 && (
+        <nav aria-label="Breadcrumb" class="mb-4">
+          <ol class="flex flex-wrap items-center gap-2 text-sm text-white/50">
+            {
+              breadcrumbs.map((crumb, index) => (
+                <li class="flex items-center gap-2">
+                  {index > 0 && <span aria-hidden="true">/</span>}
+                  {crumb.href ? (
+                    <a
+                      href={crumb.href}
+                      class="transition-colors hover:text-primary"
+                    >
+                      {crumb.label}
+                    </a>
+                  ) : (
+                    <span class="text-white/80">{crumb.label}</span>
+                  )}
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
+      )
+    }
+    <h1
+      class:list={[
+        "font-heading text-5xl tracking-wider text-white md:text-6xl",
+        image && "drop-shadow-lg",
+      ]}
+    >
       {title}
     </h1>
   </div>

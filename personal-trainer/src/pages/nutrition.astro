@@ -1,5 +1,5 @@
 ---
-import heroImage from "../assets/image_three.png";
+import heroNutritionImage from "../assets/nutrition_banner.jpg";
 import ProgramCard from "../components/shared/ProgramCard.astro";
 import PageHero from "../components/shared/PageHero.astro";
 import { nutritionPlans } from "../data/products";
@@ -13,11 +13,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <main>
     <PageHero
       title="Nutrition Plans"
-      image={heroImage}
-      breadcrumbs={[
-        { label: "Home", href: "/" },
-        { label: "Nutrition Plans" },
-      ]}
+      image={heroNutritionImage}
+      overlayClass="bg-gradient-to-t from-dark/90 via-dark/25 to-transparent"
     />
 
     <section class="mx-auto max-w-7xl px-6 py-16 md:py-24">
