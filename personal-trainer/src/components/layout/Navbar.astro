@@ -14,16 +14,19 @@ const isActive = (href: string) => {
 const focusRing =
   "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black";
 
+const navBtnClass =
+  "inline-flex items-center justify-center whitespace-nowrap rounded px-4 py-2 text-sm font-semibold uppercase tracking-wider transition-colors duration-200";
+
 const linkClass = (link: NavLink) => {
   const active = isActive(link.href);
 
   if (link.cta) {
     return active
-      ? `${focusRing} rounded bg-primary/90 px-4 py-2 text-sm font-semibold uppercase tracking-wider text-dark`
-      : `${focusRing} rounded bg-primary px-4 py-2 text-sm font-semibold uppercase tracking-wider text-dark transition-colors hover:bg-primary/90`;
+      ? `${focusRing} ${navBtnClass} bg-primary/90 text-dark`
+      : `${focusRing} ${navBtnClass} bg-primary text-dark hover:bg-primary/90`;
   }
 
-  return `${focusRing} ${
+  return `${focusRing} inline-flex items-center ${
     active ? "font-semibold text-primary" : "text-white hover:text-primary"
   }`;
 };
@@ -46,12 +49,21 @@ const mobileLinks = [
   ...links.filter((link) => link.cta),
   ...links.filter((link) => !link.cta),
 ];
+
+const quizActive = isActive("/program-selector");
+
+const quizBtnClass = quizActive
+  ? `${focusRing} ${navBtnClass} border border-primary bg-primary text-dark`
+  : `${focusRing} ${navBtnClass} border border-white/25 text-white hover:border-primary hover:bg-primary hover:text-dark`;
+
+const standardLinks = links.filter((link) => !link.cta);
+const ctaLinks = links.filter((link) => link.cta);
 ---
 
 <header id="site-header" class="sticky top-0 z-50">
   <!-- Promo / quiz bar -->
-  <div id="promo-bar" class="relative bg-primary text-dark">
-    <div class="mx-auto flex max-w-7xl items-center justify-center px-10 py-2 text-center sm:px-6">
+  <div id="promo-bar" class="bg-primary text-dark">
+    <div class="mx-auto flex max-w-7xl items-center justify-center px-6 py-2 text-center">
       <a
         href="/program-selector"
         class="group inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 text-xs font-medium sm:text-sm"
@@ -91,26 +103,6 @@ const mobileLinks = [
           </svg>
         </span>
       </a>
-      <button
-        id="promo-dismiss"
-        type="button"
-        aria-label="Dismiss"
-        class="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1.5 text-dark/60 transition-colors hover:bg-dark/10 hover:text-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark sm:right-4"
-      >
-        <svg
-          class="h-4 w-4"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </button>
     </div>
   </div>
 
@@ -118,41 +110,60 @@ const mobileLinks = [
     aria-label="Main navigation"
     class="border-b border-white/10 bg-black/70 backdrop-blur-md"
   >
-    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+    <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6 lg:h-[4.5rem]">
     <a
       href="/"
-      class="group flex items-center gap-3"
+      class="group flex shrink-0 items-center gap-2.5 lg:gap-3"
       aria-label="George Stevens Fitness — Home"
     >
       <span
-        class="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary font-heading text-[1.7rem] font-bold leading-none text-dark shadow-lg shadow-primary/20 ring-1 ring-primary/50 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-primary/40"
+        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary font-heading text-2xl font-bold leading-none text-dark ring-1 ring-primary/50 transition-shadow duration-300 group-hover:shadow-lg group-hover:shadow-primary/30"
       >
         GS
-        <span
-          class="pointer-events-none absolute -bottom-1 -right-1 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-black"
-        ></span>
       </span>
 
-      <span class="flex flex-col leading-none">
-        <span class="font-heading text-xl tracking-[0.2em] text-white sm:text-2xl">
+      <span class="flex flex-col justify-center leading-none">
+        <span class="font-heading text-lg tracking-[0.18em] text-white lg:text-xl">
           GEORGE <span class="text-primary">STEVENS</span>
         </span>
-        <span class="mt-1 flex items-center gap-2">
-          <span class="h-px w-4 bg-primary/60"></span>
-          <span class="font-body text-[0.6rem] font-bold uppercase tracking-[0.4em] text-white/60">
+        <span class="mt-0.5 hidden items-center gap-2 sm:flex">
+          <span class="h-px w-3 bg-primary/60"></span>
+          <span class="font-body text-[0.55rem] font-bold uppercase tracking-[0.35em] text-white/60">
             fitness
           </span>
         </span>
       </span>
     </a>
 
-    <ul class="hidden items-center gap-8 md:flex">
+    <ul class="hidden items-center gap-5 lg:gap-6 xl:gap-8 md:flex">
       {
-        links.map((link) => (
-          <li>
+        standardLinks.map((link) => (
+          <li class="flex items-center">
             <a
               href={link.href}
-              class={`transition-colors duration-200 ${linkClass(link)}`}
+              class={`text-sm transition-colors duration-200 ${linkClass(link)}`}
+              {...(isActive(link.href) ? { "aria-current": "page" } : {})}
+            >
+              {link.name}
+            </a>
+          </li>
+        ))
+      }
+      <li class="flex items-center">
+        <a
+          href="/program-selector"
+          class={quizBtnClass}
+          {...(quizActive ? { "aria-current": "page" } : {})}
+        >
+          Find my program
+        </a>
+      </li>
+      {
+        ctaLinks.map((link) => (
+          <li class="flex items-center">
+            <a
+              href={link.href}
+              class={linkClass(link)}
               {...(isActive(link.href) ? { "aria-current": "page" } : {})}
             >
               {link.name}
@@ -162,7 +173,7 @@ const mobileLinks = [
       }
     </ul>
 
-    <div class="flex items-center gap-5">
+    <div class="flex shrink-0 items-center gap-4">
       <CartIcon client:load />
 
       <label
@@ -230,10 +241,10 @@ const mobileLinks = [
       <a
         href="/program-selector"
         data-menu-link
-        class={`${focusRing} flex items-center justify-between gap-2 bg-primary/10 px-6 py-4 font-heading text-2xl tracking-wider text-primary transition-colors hover:bg-primary/20`}
+        class={`${focusRing} flex items-center justify-between gap-2 px-6 py-4 font-heading text-xl tracking-wider text-white transition-colors hover:bg-primary/10 hover:text-primary`}
         {...(isActive("/program-selector") ? { "aria-current": "page" } : {})}
       >
-        FIND MY PROGRAM
+        Find my program
         <svg
           class="h-5 w-5 shrink-0"
           viewBox="0 0 24 24"
@@ -298,17 +309,4 @@ const mobileLinks = [
     });
   }
 
-  const promoBar = document.getElementById("promo-bar");
-  const promoDismiss = document.getElementById("promo-dismiss");
-
-  if (promoBar && promoDismiss) {
-    if (sessionStorage.getItem("promoDismissed") === "true") {
-      promoBar.style.display = "none";
-    }
-
-    promoDismiss.addEventListener("click", () => {
-      promoBar.style.display = "none";
-      sessionStorage.setItem("promoDismissed", "true");
-    });
-  }
 </script>
