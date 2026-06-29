@@ -23,7 +23,7 @@ export default function ProgramCoverCollage({ covers, featuredId }: Props) {
 
   return (
     <div
-      className="relative mx-auto flex h-56 w-full max-w-xl items-center justify-center sm:h-72 md:h-80"
+      className="relative mx-auto flex h-52 w-full max-w-xl items-center justify-center sm:h-72 md:h-80"
       aria-hidden="true"
     >
       {sideCovers.map((cover, index) => {

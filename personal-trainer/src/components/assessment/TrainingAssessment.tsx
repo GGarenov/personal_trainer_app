@@ -2,12 +2,36 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
+  assessmentSchema,
+  assessmentSteps,
+  experienceLabels,
+  experienceLevelValues,
   genderLabels,
   genderValues,
-  personalInfoSchema,
-  type PersonalInfo,
+  goalLabels,
+  goalValues,
+  trainingDaysLabels,
+  trainingDaysValues,
+  type AssessmentAnswers,
+  type ExperienceLevel,
+  type Gender,
+  type Goal,
+  type TrainingDays,
 } from "../../lib/assessmentSchema";
+import { recommendTrainingProgram } from "../../lib/recommendTrainingProgram";
+import AssessmentOptionButton from "./AssessmentOptionButton";
+import AssessmentResult from "./AssessmentResult";
+import AssessmentStep from "./AssessmentStep";
 import ProgramCoverCollage from "./ProgramCoverCollage";
+import {
+  assessmentErrorClass,
+  assessmentInputClass,
+  assessmentIntroSectionClass,
+  assessmentLabelClass,
+  assessmentOptionListClass,
+  assessmentPrimaryButtonClass,
+  assessmentSectionClass,
+} from "./assessmentStyles";
 
 interface ProgramCover {
   id: string;
@@ -19,45 +43,45 @@ interface Props {
   programCovers: ProgramCover[];
 }
 
-type View = "intro" | "quiz";
+type View = "intro" | "quiz" | "result";
 
-const inputClass =
-  "w-full rounded border border-white/20 bg-dark px-4 py-3 text-white placeholder:text-white/40 transition-colors focus:border-primary focus:outline-none";
+const emptyDefaults: AssessmentAnswers = {
+  age: "" as unknown as number,
+  gender: undefined as unknown as Gender,
+  heightCm: "" as unknown as number,
+  weightKg: "" as unknown as number,
+  experienceLevel: undefined as unknown as ExperienceLevel,
+  goal: undefined as unknown as Goal,
+  trainingDays: undefined as unknown as TrainingDays,
+};
 
-const labelClass = "mb-2 block text-sm font-medium text-white/80";
-
-const optionButtonClass = (selected: boolean) =>
-  [
-    "w-full rounded px-6 py-4 text-sm font-semibold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark",
-    selected
-      ? "bg-primary/90 text-dark"
-      : "bg-primary text-dark hover:bg-primary/90",
-  ].join(" ");
+const TRANSITION_MS = 200;
 
 export default function TrainingAssessment({ programCovers }: Props) {
   const [view, setView] = useState<View>("intro");
+  const [stepIndex, setStepIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const {
     register,
     setValue,
     watch,
-    handleSubmit,
+    getValues,
+    setError,
+    clearErrors,
+    reset,
     formState: { errors },
-  } = useForm<PersonalInfo>({
-    resolver: zodResolver(personalInfoSchema),
-    defaultValues: {
-      age: "" as unknown as number,
-      gender: undefined as unknown as PersonalInfo["gender"],
-      heightCm: "" as unknown as number,
-      weightKg: "" as unknown as number,
-    },
+  } = useForm<AssessmentAnswers>({
+    resolver: zodResolver(assessmentSchema),
+    defaultValues: emptyDefaults,
     mode: "onTouched",
   });
 
-  const selectedGender = watch("gender");
+  const currentStep = assessmentSteps[stepIndex];
+  const isLastStep = stepIndex === assessmentSteps.length - 1;
+  const answers = watch();
 
-  const startQuiz = () => {
-    setView("quiz");
+  const scrollToQuiz = () => {
     window.requestAnimationFrame(() => {
       document.getElementById("assessment-quiz")?.scrollIntoView({
         behavior: "smooth",
@@ -66,159 +90,333 @@ export default function TrainingAssessment({ programCovers }: Props) {
     });
   };
 
-  const continueFromPersonalInfo = handleSubmit(() => {
-    // Step navigation will be added in Phase 3.
-  });
+  const withTransition = (action: () => void) => {
+    if (isTransitioning) return;
+
+    setIsTransitioning(true);
+    action();
+    scrollToQuiz();
+
+    window.setTimeout(() => {
+      setIsTransitioning(false);
+    }, TRANSITION_MS);
+  };
+
+  const startQuiz = () => {
+    withTransition(() => {
+      setStepIndex(0);
+      setView("quiz");
+    });
+  };
+
+  const retakeQuiz = () => {
+    withTransition(() => {
+      reset(emptyDefaults);
+      setStepIndex(0);
+      setView("intro");
+    });
+  };
+
+  const validateCurrentStep = () => {
+    const fields = currentStep.fields;
+    const stepValues = fields.reduce(
+      (accumulator, field) => ({
+        ...accumulator,
+        [field]: getValues(field),
+      }),
+      {} as Record<string, unknown>,
+    );
+
+    const result = currentStep.schema.safeParse(stepValues);
+
+    if (!result.success) {
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0] as keyof AssessmentAnswers;
+        setError(field, { type: "manual", message: issue.message });
+      });
+      return false;
+    }
+
+    clearErrors([...fields]);
+    return true;
+  };
+
+  const handleNext = () => {
+    if (isTransitioning || !validateCurrentStep()) return;
+
+    withTransition(() => {
+      if (isLastStep) {
+        const fullResult = assessmentSchema.safeParse(getValues());
+        if (!fullResult.success) return;
+        setView("result");
+        return;
+      }
+
+      setStepIndex((current) => current + 1);
+    });
+  };
+
+  const handleBack = () => {
+    if (isTransitioning) return;
+
+    withTransition(() => {
+      if (stepIndex === 0) {
+        setView("intro");
+        return;
+      }
+
+      setStepIndex((current) => current - 1);
+    });
+  };
+
+  const setOption = (
+    field: keyof AssessmentAnswers,
+    value: AssessmentAnswers[keyof AssessmentAnswers],
+  ) => {
+    if (isTransitioning) return;
+
+    setValue(field, value as never, {
+      shouldValidate: true,
+      shouldTouch: true,
+    });
+  };
+
+  const renderStepFields = () => {
+    switch (currentStep.id) {
+      case "personal":
+        return (
+          <div className="space-y-8">
+            <div>
+              <label htmlFor="age" className={assessmentLabelClass}>
+                Age
+              </label>
+              <input
+                id="age"
+                type="number"
+                inputMode="numeric"
+                min={16}
+                max={80}
+                placeholder="e.g. 28"
+                className={assessmentInputClass}
+                disabled={isTransitioning}
+                aria-invalid={errors.age ? "true" : "false"}
+                aria-describedby={errors.age ? "age-error" : undefined}
+                {...register("age")}
+              />
+              {errors.age && (
+                <p id="age-error" className={assessmentErrorClass} role="alert">
+                  {errors.age.message}
+                </p>
+              )}
+            </div>
+
+            <fieldset disabled={isTransitioning}>
+              <legend className={`${assessmentLabelClass} text-center`}>
+                Gender
+              </legend>
+              <div className={assessmentOptionListClass}>
+                {genderValues.map((value) => (
+                  <AssessmentOptionButton
+                    key={value}
+                    selected={answers.gender === value}
+                    disabled={isTransitioning}
+                    onClick={() => setOption("gender", value)}
+                  >
+                    {genderLabels[value]}
+                  </AssessmentOptionButton>
+                ))}
+              </div>
+              {errors.gender && (
+                <p className={`${assessmentErrorClass} text-center`} role="alert">
+                  {errors.gender.message}
+                </p>
+              )}
+            </fieldset>
+
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div>
+                <label htmlFor="heightCm" className={assessmentLabelClass}>
+                  Height (cm)
+                </label>
+                <input
+                  id="heightCm"
+                  type="number"
+                  inputMode="decimal"
+                  min={130}
+                  max={230}
+                  placeholder="e.g. 175"
+                  className={assessmentInputClass}
+                  disabled={isTransitioning}
+                  aria-invalid={errors.heightCm ? "true" : "false"}
+                  aria-describedby={errors.heightCm ? "height-error" : undefined}
+                  {...register("heightCm")}
+                />
+                {errors.heightCm && (
+                  <p id="height-error" className={assessmentErrorClass} role="alert">
+                    {errors.heightCm.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="weightKg" className={assessmentLabelClass}>
+                  Weight (kg)
+                </label>
+                <input
+                  id="weightKg"
+                  type="number"
+                  inputMode="decimal"
+                  min={35}
+                  max={250}
+                  placeholder="e.g. 78"
+                  className={assessmentInputClass}
+                  disabled={isTransitioning}
+                  aria-invalid={errors.weightKg ? "true" : "false"}
+                  aria-describedby={errors.weightKg ? "weight-error" : undefined}
+                  {...register("weightKg")}
+                />
+                {errors.weightKg && (
+                  <p id="weight-error" className={assessmentErrorClass} role="alert">
+                    {errors.weightKg.message}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+
+      case "experience":
+        return (
+          <fieldset disabled={isTransitioning}>
+            <legend className="sr-only">Training experience</legend>
+            <div className={assessmentOptionListClass}>
+              {experienceLevelValues.map((value) => (
+                <AssessmentOptionButton
+                  key={value}
+                  selected={answers.experienceLevel === value}
+                  disabled={isTransitioning}
+                  onClick={() => setOption("experienceLevel", value)}
+                >
+                  {experienceLabels[value]}
+                </AssessmentOptionButton>
+              ))}
+            </div>
+            {errors.experienceLevel && (
+              <p className={`${assessmentErrorClass} text-center`} role="alert">
+                {errors.experienceLevel.message}
+              </p>
+            )}
+          </fieldset>
+        );
+
+      case "goal":
+        return (
+          <fieldset disabled={isTransitioning}>
+            <legend className="sr-only">Primary goal</legend>
+            <div className={assessmentOptionListClass}>
+              {goalValues.map((value) => (
+                <AssessmentOptionButton
+                  key={value}
+                  selected={answers.goal === value}
+                  disabled={isTransitioning}
+                  onClick={() => setOption("goal", value)}
+                >
+                  {goalLabels[value]}
+                </AssessmentOptionButton>
+              ))}
+            </div>
+            {errors.goal && (
+              <p className={`${assessmentErrorClass} text-center`} role="alert">
+                {errors.goal.message}
+              </p>
+            )}
+          </fieldset>
+        );
+
+      case "availability":
+        return (
+          <fieldset disabled={isTransitioning}>
+            <legend className="sr-only">Weekly training availability</legend>
+            <div className={assessmentOptionListClass}>
+              {trainingDaysValues.map((value) => (
+                <AssessmentOptionButton
+                  key={value}
+                  selected={answers.trainingDays === value}
+                  disabled={isTransitioning}
+                  onClick={() => setOption("trainingDays", value)}
+                >
+                  {trainingDaysLabels[value]}
+                </AssessmentOptionButton>
+              ))}
+            </div>
+            {errors.trainingDays && (
+              <p className={`${assessmentErrorClass} text-center`} role="alert">
+                {errors.trainingDays.message}
+              </p>
+            )}
+          </fieldset>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  if (view === "result") {
+    const resultAnswers = getValues();
+    const recommendation = recommendTrainingProgram(resultAnswers);
+    const programImage = programCovers.find(
+      (cover) => cover.id === recommendation.programId,
+    )?.image;
+
+    return (
+      <section
+        id="assessment-quiz"
+        className={assessmentSectionClass}
+        aria-label="Training program assessment result"
+      >
+        <AssessmentResult
+          programId={recommendation.programId}
+          programName={recommendation.programName}
+          programSummary={recommendation.summary}
+          reason={recommendation.reason}
+          ctaHref={recommendation.ctaHref}
+          ctaLabel={recommendation.ctaLabel}
+          programImage={programImage}
+          answers={resultAnswers}
+          onRetake={retakeQuiz}
+          isTransitioning={isTransitioning}
+        />
+      </section>
+    );
+  }
 
   if (view === "quiz") {
     return (
       <section
         id="assessment-quiz"
-        className="mx-auto max-w-2xl px-6 py-16 md:py-24"
+        className={assessmentSectionClass}
         aria-label="Training program assessment"
       >
-        <button
-          type="button"
-          onClick={() => setView("intro")}
-          className="mb-8 text-sm font-semibold uppercase tracking-wider text-white/60 transition-colors hover:text-primary"
+        <AssessmentStep
+          stepNumber={stepIndex + 1}
+          totalSteps={assessmentSteps.length}
+          title={currentStep.title}
+          description={currentStep.description}
+          onBack={handleBack}
+          onNext={handleNext}
+          nextLabel={isLastStep ? "See My Program" : "Continue"}
+          backLabel={stepIndex === 0 ? "← Back to intro" : "← Back"}
+          isTransitioning={isTransitioning}
         >
-          ← Back to intro
-        </button>
-
-        <div className="space-y-8">
-          <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-              Step 1 of 4
-            </p>
-            <h2 className="mt-3 font-heading text-4xl tracking-wider text-white md:text-5xl">
-              Personal Information
-            </h2>
-            <p className="mt-3 text-white/70">
-              Tell us a bit about yourself so we can tailor your recommendation.
-            </p>
-          </div>
-
-          <div>
-            <label htmlFor="age" className={labelClass}>
-              Age
-            </label>
-            <input
-              id="age"
-              type="number"
-              inputMode="numeric"
-              min={16}
-              max={80}
-              placeholder="e.g. 28"
-              className={inputClass}
-              aria-invalid={errors.age ? "true" : "false"}
-              aria-describedby={errors.age ? "age-error" : undefined}
-              {...register("age")}
-            />
-            {errors.age && (
-              <p id="age-error" className="mt-2 text-sm text-red-400" role="alert">
-                {errors.age.message}
-              </p>
-            )}
-          </div>
-
-          <fieldset>
-            <legend className={`${labelClass} text-center`}>Gender</legend>
-            <div className="space-y-3">
-              {genderValues.map((value) => (
-                <button
-                  key={value}
-                  type="button"
-                  className={optionButtonClass(selectedGender === value)}
-                  onClick={() =>
-                    setValue("gender", value, {
-                      shouldValidate: true,
-                      shouldTouch: true,
-                    })
-                  }
-                >
-                  {genderLabels[value]}
-                </button>
-              ))}
-            </div>
-            {errors.gender && (
-              <p className="mt-2 text-center text-sm text-red-400" role="alert">
-                {errors.gender.message}
-              </p>
-            )}
-          </fieldset>
-
-          <div className="grid gap-6 sm:grid-cols-2">
-            <div>
-              <label htmlFor="heightCm" className={labelClass}>
-                Height (cm)
-              </label>
-              <input
-                id="heightCm"
-                type="number"
-                inputMode="decimal"
-                min={130}
-                max={230}
-                placeholder="e.g. 175"
-                className={inputClass}
-                aria-invalid={errors.heightCm ? "true" : "false"}
-                aria-describedby={errors.heightCm ? "height-error" : undefined}
-                {...register("heightCm")}
-              />
-              {errors.heightCm && (
-                <p
-                  id="height-error"
-                  className="mt-2 text-sm text-red-400"
-                  role="alert"
-                >
-                  {errors.heightCm.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="weightKg" className={labelClass}>
-                Weight (kg)
-              </label>
-              <input
-                id="weightKg"
-                type="number"
-                inputMode="decimal"
-                min={35}
-                max={250}
-                placeholder="e.g. 78"
-                className={inputClass}
-                aria-invalid={errors.weightKg ? "true" : "false"}
-                aria-describedby={errors.weightKg ? "weight-error" : undefined}
-                {...register("weightKg")}
-              />
-              {errors.weightKg && (
-                <p
-                  id="weight-error"
-                  className="mt-2 text-sm text-red-400"
-                  role="alert"
-                >
-                  {errors.weightKg.message}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="pt-2 text-center">
-            <button
-              type="button"
-              onClick={continueFromPersonalInfo}
-              className="inline-block rounded bg-primary px-10 py-3 text-sm font-semibold uppercase tracking-wider text-dark transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
-            >
-              Continue
-            </button>
-          </div>
-        </div>
+          {renderStepFields()}
+        </AssessmentStep>
       </section>
     );
   }
 
   return (
-    <section className="mx-auto max-w-3xl px-6 py-16 text-center md:py-24">
+    <section className={assessmentIntroSectionClass}>
       <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
         Free Program Match
       </p>
@@ -227,21 +425,22 @@ export default function TrainingAssessment({ programCovers }: Props) {
         Find the Perfect Program for Your Goals
       </h1>
 
-      <p className="mx-auto mt-5 max-w-2xl text-lg text-white/75">
+      <p className="mx-auto mt-5 max-w-2xl text-base text-white/75 sm:text-lg">
         Take this free quiz to get matched with the right program based on your
         goals and experience. Less than 10 questions and no sign-up required.
       </p>
 
-      <div className="mt-10">
+      <div className="mt-8 sm:mt-10">
         <ProgramCoverCollage covers={programCovers} />
       </div>
 
       <button
         type="button"
         onClick={startQuiz}
-        className="mt-10 inline-block rounded bg-primary px-10 py-3 text-sm font-semibold uppercase tracking-wider text-dark transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
+        disabled={isTransitioning}
+        className={`${assessmentPrimaryButtonClass} mt-8 sm:mt-10`}
       >
-        Start Quiz
+        {isTransitioning ? "Loading..." : "Start Quiz"}
       </button>
     </section>
   );

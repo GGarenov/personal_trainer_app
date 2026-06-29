@@ -117,3 +117,37 @@ export const trainingDaysLabels: Record<TrainingDays, string> = {
   "4": "4 days",
   "5_plus": "5+ days",
 };
+
+export const assessmentSteps = [
+  {
+    id: "personal",
+    title: "Personal Information",
+    description:
+      "Tell us a bit about yourself so we can tailor your recommendation.",
+    schema: personalInfoSchema,
+    fields: personalInfoFields,
+  },
+  {
+    id: "experience",
+    title: "Training Experience",
+    description: "How long have you been training consistently?",
+    schema: experienceSchema,
+    fields: experienceFields,
+  },
+  {
+    id: "goal",
+    title: "What is your primary goal?",
+    description: "Choose the outcome that matters most to you right now.",
+    schema: goalStepSchema,
+    fields: goalFields,
+  },
+  {
+    id: "availability",
+    title: "Weekly Availability",
+    description: "How many days per week can you realistically train?",
+    schema: availabilitySchema,
+    fields: availabilityFields,
+  },
+] as const;
+
+export type AssessmentStepId = (typeof assessmentSteps)[number]["id"];
