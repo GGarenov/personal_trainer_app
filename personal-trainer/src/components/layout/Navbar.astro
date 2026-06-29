@@ -18,14 +18,11 @@ const isActive = (href) => {
 };
 ---
 
-<header class="sticky top-0 z-50 backdrop-blur-md bg-black/70 border-b border-white/10">
+<header class="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-md">
   <nav
     aria-label="Main navigation"
     class="mx-auto flex h-20 max-w-7xl items-center justify-between px-6"
   >
-
-    <!-- LOGO -->
-
     <a
       href="/"
       class="group flex items-center gap-3 transition-opacity hover:opacity-90"
@@ -47,42 +44,15 @@ const isActive = (href) => {
       </span>
     </a>
 
-    <!-- MOBILE TOGGLE -->
-
-    <input id="menu-toggle" type="checkbox" class="peer hidden" />
-
-    <label
-      for="menu-toggle"
-      class="cursor-pointer md:hidden"
-      aria-label="Toggle menu"
-    >
-      <div class="space-y-1">
-        <span class="block h-0.5 w-6 bg-white"></span>
-        <span class="block h-0.5 w-6 bg-white"></span>
-        <span class="block h-0.5 w-6 bg-white"></span>
-      </div>
-    </label>
-
-    <!-- NAV LINKS -->
-
-    <ul
-      class="
-      absolute left-0 top-20 hidden w-full flex-col
-      bg-black/95 px-6 py-6
-      peer-checked:flex
-      md:static md:flex md:w-auto md:flex-row
-      md:items-center md:gap-8 md:bg-transparent
-    "
-    >
+    <ul class="hidden items-center gap-8 md:flex">
       {
         links.map((link) => (
           <li>
             <a
               href={link.href}
-              class={`transition-colors duration-200
-              ${
+              class={`transition-colors duration-200 ${
                 isActive(link.href)
-                  ? "text-primary font-semibold"
+                  ? "font-semibold text-primary"
                   : "text-white hover:text-primary"
               }`}
             >
@@ -93,18 +63,96 @@ const isActive = (href) => {
       }
     </ul>
 
-    <!-- RIGHT SIDE -->
-
-    <div class="hidden md:flex items-center">
+    <div class="flex items-center gap-5">
       <CartIcon client:load />
+
+      <label
+        for="menu-toggle"
+        class="cursor-pointer md:hidden"
+        aria-label="Open menu"
+      >
+        <div class="space-y-1.5">
+          <span class="block h-0.5 w-6 bg-white"></span>
+          <span class="block h-0.5 w-6 bg-white"></span>
+          <span class="block h-0.5 w-6 bg-white"></span>
+        </div>
+      </label>
     </div>
-
   </nav>
+</header>
 
-  <!-- MOBILE CART -->
+<input id="menu-toggle" type="checkbox" class="peer hidden" />
 
-  <div class="absolute right-16 top-7 md:hidden">
-    <CartIcon client:load />
+<label
+  for="menu-toggle"
+  class="pointer-events-none fixed inset-0 z-[80] bg-black/70 opacity-0 transition-opacity duration-300 peer-checked:pointer-events-auto peer-checked:opacity-100 md:hidden"
+  aria-hidden="true"
+></label>
+
+<aside
+  id="mobile-menu"
+  class="fixed left-0 top-0 z-[90] flex h-dvh min-h-dvh w-[min(100%,20rem)] -translate-x-full flex-col bg-black shadow-2xl transition-transform duration-300 ease-out peer-checked:translate-x-0 md:hidden"
+  aria-label="Mobile navigation"
+  aria-hidden="true"
+>
+  <div class="flex items-center border-b border-white/10 bg-black px-6 py-5">
+    <label
+      for="menu-toggle"
+      class="cursor-pointer p-1 text-white transition-colors hover:text-primary"
+      aria-label="Close menu"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-7 w-7"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"
+        ></path>
+      </svg>
+    </label>
   </div>
 
-</header>
+  <ul class="flex flex-1 flex-col bg-black">
+    {
+      links.map((link) => (
+        <li class="border-b border-white/10">
+          <a
+            href={link.href}
+            data-menu-link
+            class={`block px-6 py-4 font-heading text-2xl tracking-wider transition-colors ${
+              isActive(link.href)
+                ? "text-primary"
+                : "text-white hover:text-primary"
+            }`}
+          >
+            {link.name.toUpperCase()}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</aside>
+
+<script>
+  const toggle = document.getElementById("menu-toggle") as HTMLInputElement | null;
+  const menu = document.getElementById("mobile-menu");
+
+  if (toggle && menu) {
+    const syncMenuState = () => {
+      menu.setAttribute("aria-hidden", toggle.checked ? "false" : "true");
+      document.body.style.overflow = toggle.checked ? "hidden" : "";
+    };
+
+    toggle.addEventListener("change", syncMenuState);
+
+    document.querySelectorAll("[data-menu-link]").forEach((link) => {
+      link.addEventListener("click", () => {
+        toggle.checked = false;
+        syncMenuState();
+      });
+    });
+  }
+</script>

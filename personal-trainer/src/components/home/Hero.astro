@@ -4,7 +4,7 @@ import heroBg from "../../assets/image_seven.jpg";
 import Button from "../shared/Button.astro";
 ---
 
-<section class="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
+<section class="relative flex min-h-[68vh] w-full items-center justify-center overflow-hidden md:min-h-[72vh] lg:min-h-[78vh]">
   <Image
     src={heroBg}
     alt="Athlete performing a front squat in the gym"
@@ -21,14 +21,14 @@ import Button from "../shared/Button.astro";
   >
   </div>
 
-  <div class="relative z-10 mx-auto max-w-4xl px-6 py-24 text-center">
-    <h1 class="font-heading text-6xl leading-none tracking-wider text-white md:text-8xl lg:text-9xl">
+  <div class="relative z-10 mx-auto max-w-4xl px-6 py-12 text-center md:py-16">
+    <h1 class="font-heading text-5xl leading-none tracking-wider text-white md:text-7xl lg:text-8xl">
       TRANSFORM YOUR BODY
     </h1>
     <p class="mt-6 text-lg text-white/80 md:text-xl">
       Science-based training &amp; nutrition programs
     </p>
-    <div class="mt-10">
+    <div class="mt-8">
       <Button href="/programs">View Programs</Button>
     </div>
   </div>
