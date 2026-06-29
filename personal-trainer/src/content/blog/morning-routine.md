@@ -2,7 +2,7 @@
 title: "The 5 AM Routine That Sticks"
 pubDate: 2025-11-18
 description: "Early mornings aren't for everyone — but a repeatable morning routine can anchor your whole day."
-author: "Gary Bean"
+author: "George Stevens"
 image: "mindset_blog_four.jpg"
 category: "Mindset"
 tags: ["habits", "routine", "productivity"]

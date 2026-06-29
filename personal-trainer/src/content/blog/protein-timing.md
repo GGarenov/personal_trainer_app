@@ -2,7 +2,7 @@
 title: "Protein Timing: Does It Matter?"
 pubDate: 2026-01-22
 description: "The anabolic window is smaller than you think — but daily protein intake matters far more than meal timing."
-author: "Gary Bean"
+author: "George Stevens"
 image: "nutrition_blog_four.jpg"
 category: "Nutrition"
 tags: ["protein", "nutrition", "muscle-gain"]

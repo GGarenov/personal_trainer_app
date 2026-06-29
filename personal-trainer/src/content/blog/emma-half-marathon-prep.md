@@ -2,7 +2,7 @@
 title: "Emma's Half Marathon Prep While Losing 8 kg"
 pubDate: 2025-11-30
 description: "How we combined running volume, strength work, and smart nutrition for a 1:52 finish."
-author: "Gary Bean"
+author: "George Stevens"
 image: "transformation_blog_three.jpg"
 category: "Transformations"
 tags: ["running", "fat-loss", "case-study"]

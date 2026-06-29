@@ -2,7 +2,7 @@
 title: "Marcus Gained 12 kg of Lean Mass in 20 Weeks"
 pubDate: 2025-12-20
 description: "A skinny college grad who couldn't bench 60 kg — and the bulk that changed everything."
-author: "Gary Bean"
+author: "George Stevens"
 image: "transformation_blog_one.jpg"
 category: "Transformations"
 tags: ["muscle-gain", "case-study", "bulking"]

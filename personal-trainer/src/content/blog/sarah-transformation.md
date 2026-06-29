@@ -2,7 +2,7 @@
 title: "Sarah's 12-Week Transformation"
 pubDate: 2025-12-05
 description: "How Sarah lost 18 kg while gaining strength — without extreme dieting or two-a-day workouts."
-author: "Gary Bean"
+author: "George Stevens"
 image: "transformation_blog_two.jpg"
 category: "Transformations"
 tags: ["fat-loss", "case-study", "transformation"]

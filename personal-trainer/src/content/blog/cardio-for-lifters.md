@@ -2,7 +2,7 @@
 title: "Cardio for Lifters: How Much Is Enough?"
 pubDate: 2026-03-28
 description: "You don't have to choose between a strong squat and a healthy heart — here's how to balance both."
-author: "Gary Bean"
+author: "George Stevens"
 image: "training_blog_two.jpg"
 category: "Training"
 tags: ["cardio", "conditioning", "recovery"]

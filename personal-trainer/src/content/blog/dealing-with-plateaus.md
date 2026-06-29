@@ -2,7 +2,7 @@
 title: "Dealing with Training Plateaus"
 pubDate: 2026-02-05
 description: "Stuck at the same numbers for weeks? Plateaus are normal — here's how to break through them."
-author: "Gary Bean"
+author: "George Stevens"
 image: "mindset_blog_one.jpg"
 category: "Mindset"
 tags: ["plateaus", "progress", "mindset"]
