@@ -105,7 +105,9 @@ export default function ContactForm() {
       setValues(emptyValues);
       setHoneypot("");
     } catch (error) {
-      console.error("EmailJS error:", error);
+      if (import.meta.env.DEV) {
+        console.error("EmailJS error:", error);
+      }
       setStatus("error");
     }
   };

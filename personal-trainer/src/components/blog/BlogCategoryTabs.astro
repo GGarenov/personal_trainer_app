@@ -1,4 +1,6 @@
 ---
+import { blogCategories } from "../../lib/blogImages";
+import { categoryToSlug } from "../../lib/blog";
 import type { BlogCategory } from "../../lib/blogImages";
 
 interface Props {
@@ -9,14 +11,11 @@ const { activeCategory = "All" } = Astro.props;
 
 const tabs: { label: string; href: string; key: BlogCategory | "All" }[] = [
   { label: "All", href: "/blog/", key: "All" },
-  { label: "Training", href: "/blog/category/Training/", key: "Training" },
-  { label: "Nutrition", href: "/blog/category/Nutrition/", key: "Nutrition" },
-  { label: "Mindset", href: "/blog/category/Mindset/", key: "Mindset" },
-  {
-    label: "Transformations",
-    href: "/blog/category/Transformations/",
-    key: "Transformations",
-  },
+  ...blogCategories.map((category) => ({
+    label: category,
+    href: `/blog/category/${categoryToSlug(category)}/`,
+    key: category,
+  })),
 ];
 ---
 

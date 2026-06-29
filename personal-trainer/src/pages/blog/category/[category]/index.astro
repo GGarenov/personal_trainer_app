@@ -9,24 +9,29 @@ import {
 } from "../../../../lib/blogImages";
 import {
   BLOG_HERO_CLASS,
+  categoryToSlug,
   getBlogPageCount,
   getBlogPagePosts,
+  getCategoryBasePath,
   getSortedBlogPosts,
+  slugToCategory,
 } from "../../../../lib/blog";
 
 export async function getStaticPaths() {
   return blogCategories.map((category) => ({
-    params: { category },
+    params: { category: categoryToSlug(category) },
   }));
 }
 
-const category = Astro.params.category as BlogCategory;
+const categorySlug = Astro.params.category!;
+const category = slugToCategory(categorySlug) as BlogCategory;
+
 const allPosts = (await getSortedBlogPosts()).filter(
   (post) => post.data.category === category,
 );
 const lastPage = getBlogPageCount(allPosts);
 const posts = getBlogPagePosts(allPosts, 1);
-const basePath = `/blog/category/${category}`;
+const basePath = getCategoryBasePath(category);
 ---
 
 <BaseLayout

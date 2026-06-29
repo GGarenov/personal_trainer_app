@@ -1,8 +1,21 @@
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
+import { blogCategories, type BlogCategory } from "./blogImages";
 
 export const BLOG_PAGE_SIZE = 6;
 export const BLOG_HERO_CLASS = "min-h-[40vh] md:min-h-[48vh]";
+
+export function categoryToSlug(category: BlogCategory): string {
+  return category.toLowerCase();
+}
+
+export function slugToCategory(slug: string): BlogCategory | undefined {
+  return blogCategories.find((category) => categoryToSlug(category) === slug);
+}
+
+export function getCategoryBasePath(category: BlogCategory): string {
+  return `/blog/category/${categoryToSlug(category)}`;
+}
 
 export async function getSortedBlogPosts() {
   return (await getCollection("blog")).sort(
