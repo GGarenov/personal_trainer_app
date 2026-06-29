@@ -3,7 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { blogCategories, type BlogCategory } from "./blogImages";
 
 export const BLOG_PAGE_SIZE = 6;
-export const BLOG_HERO_CLASS = "min-h-[40vh] md:min-h-[48vh]";
+export const BLOG_HERO_CLASS = "min-h-[44vh] md:min-h-[50vh]";
 
 export function categoryToSlug(category: BlogCategory): string {
   return category.toLowerCase();

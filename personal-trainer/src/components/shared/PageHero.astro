@@ -21,11 +21,11 @@ const {
   breadcrumbs,
   image,
   imageClass = "object-cover object-center",
-  overlayClass = "bg-gradient-to-r from-dark via-dark/90 to-dark/70",
+  overlayClass = "bg-gradient-to-b from-dark/35 via-dark/55 to-dark/90",
   heroClass = "",
 } = Astro.props;
 
-const defaultHeroHeight = "min-h-[45vh] md:min-h-[50vh]";
+const defaultHeroHeight = "min-h-[52vh] md:min-h-[58vh]";
 const resolvedHeroHeight = heroClass || defaultHeroHeight;
 ---
 
@@ -61,7 +61,7 @@ const resolvedHeroHeight = heroClass || defaultHeroHeight;
   }
   <div
     class:list={[
-      "relative mx-auto max-w-7xl px-6 py-12 md:py-16",
+      "relative mx-auto max-w-7xl px-6 py-14 md:py-20",
       image && ["flex flex-col justify-end", resolvedHeroHeight],
     ]}
   >

@@ -1,21 +1,17 @@
 ---
-import { Image } from "astro:assets";
+import PageHero from "../shared/PageHero.astro";
 import heroImage from "../../assets/banner.png";
 ---
 
 <section class="w-full overflow-hidden bg-dark">
-  <Image
-    src={heroImage}
-    alt="George Stevens — personal trainer and strength coach"
-    class="mx-auto w-full max-h-[70vh] object-contain object-center"
-    widths={[640, 960, 1280, 1920]}
-    sizes="100vw"
-    loading="eager"
-    decoding="async"
-    quality={75}
+  <PageHero
+    title="About"
+    image={heroImage}
+    imageClass="object-contain object-center"
+    heroClass="min-h-[42vh] md:min-h-[48vh]"
+    overlayClass="bg-gradient-to-b from-dark/35 via-dark/55 to-dark/90"
   />
-  <div class="px-6 pb-12 pt-4 text-center md:pb-16">
-    <h1 class="sr-only">George Stevens</h1>
+  <div class="mx-auto max-w-7xl px-6 pb-14 pt-8 text-center md:pb-20">
     <p class="mx-auto max-w-xl text-lg text-white/80 md:text-xl">
       Science-based training &amp; nutrition for lasting transformation
     </p>
