@@ -1,8 +1,5 @@
 import { useState } from "react";
-
-const FORM_ENDPOINT =
-  import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ??
-  "https://formspree.io/f/YOUR_FORM_ID";
+import emailjs from "@emailjs/browser";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -69,22 +66,23 @@ export default function ContactForm() {
     setErrors({});
 
     try {
-      const response = await fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
+      await emailjs.send(
+        import.meta.env.PUBLIC_EMAILJS_SERVICE_ID,
+        import.meta.env.PUBLIC_EMAILJS_TEMPLATE_ID,
+        {
+          user_name: values.name.trim(),
+          user_email: values.email.trim(),
+          subject: values.subject.trim(),
+          message: values.message.trim(),
+          reply_to: values.email.trim(),
         },
-        body: JSON.stringify(values),
-      });
-
-      if (!response.ok) {
-        throw new Error("Form submission failed.");
-      }
+        import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY
+      );
 
       setStatus("success");
       setValues({ name: "", email: "", subject: "", message: "" });
-    } catch {
+    } catch (error) {
+      console.error("EmailJS error:", error);
       setStatus("error");
     }
   };
