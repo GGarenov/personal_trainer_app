@@ -67,7 +67,7 @@ personal-trainer/
 │   ├── components/      Astro + React components by feature
 │   ├── config/          Site-wide config (Calendly URL)
 │   ├── content/blog/    Markdown blog posts
-│   ├── data/            Product catalog (training + nutrition)
+│   ├── data/          Product catalog (types, trainingPrograms, nutritionPlans)
 │   ├── layouts/         BaseLayout.astro
 │   ├── lib/             Utilities (blog, images, assessment)
 │   ├── pages/           File-based routes
@@ -107,5 +107,5 @@ Build output includes an auto-generated sitemap at `/sitemap-index.xml`.
 
 ## Content
 
-- **Blog posts** — add markdown files under `src/content/blog/` with frontmatter (`title`, `pubDate`, `description`, `author`, `image`, `category`, `tags`). Register new cover images in `src/lib/blogImages.ts`.
-- **Products** — edit `src/data/products.ts`. Register new cover images in `src/lib/productImages.ts`.
+- **Blog posts** — add markdown files under `src/content/blog/` with frontmatter (`title`, `pubDate`, `description`, `author`, `image`, `category`, `tags`). Cover images in `src/assets/` are auto-discovered by filename.
+- **Products** — edit `src/data/trainingPrograms.ts` or `nutritionPlans.ts`. New cover images in `src/assets/` are auto-discovered (no map edits needed).
