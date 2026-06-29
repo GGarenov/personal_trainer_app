@@ -1,17 +1,10 @@
 ---
 import CartIcon from "../shared/CartIcon.jsx";
+import { navLinks } from "../../config/navigation";
 
 const pathname = Astro.url.pathname;
 
-const links = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Training Programs", href: "/programs" },
-  { name: "Nutrition Plans", href: "/nutrition" },
-  { name: "Blog", href: "/blog" },
-  { name: "Contact", href: "/contact" },
-  { name: "Book", href: "/book", cta: true },
-];
+const links = navLinks;
 
 const isActive = (href) => {
   if (href === "/") return pathname === "/";
