@@ -49,11 +49,23 @@ Create a `.env` file in the project root (see `.env.example`). All vars are pref
 | `npm run dev` | Local dev server at `localhost:4321` |
 | `npm run build` | Production build → `dist/` |
 | `npm run preview` | Serve the production build locally |
+| `npm run check` | TypeScript + Astro diagnostics |
+| `npm run lint` | ESLint |
+| `npm run format` | Prettier (write) |
+| `npm run compress-assets` | Compress oversized images in `src/assets/` |
 
 Optional: compress oversized images in `src/assets/` before committing:
 
 ```sh
-node scripts/compress-assets.mjs
+npm run compress-assets
+```
+
+## Quality checks
+
+```sh
+npm run check    # TypeScript + Astro
+npm run lint     # ESLint
+npm run format   # Prettier (writes files)
 ```
 
 ## Project structure

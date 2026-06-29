@@ -1,6 +1,9 @@
-import type { Prefill } from "react-calendly";
-
 export interface CalendlyPrefillFields {
+  name?: string;
+  email?: string;
+}
+
+export interface CalendlyPrefill {
   name?: string;
   email?: string;
 }
@@ -8,7 +11,7 @@ export interface CalendlyPrefillFields {
 export function buildCalendlyPrefill({
   name,
   email,
-}: CalendlyPrefillFields): Prefill | undefined {
+}: CalendlyPrefillFields): CalendlyPrefill | undefined {
   if (!name && !email) return undefined;
 
   return {

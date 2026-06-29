@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import {
   assessmentSchema,
   assessmentSteps,
@@ -72,7 +72,7 @@ export default function TrainingAssessment({ programCovers }: Props) {
     reset,
     formState: { errors },
   } = useForm<AssessmentAnswers>({
-    resolver: zodResolver(assessmentSchema),
+    resolver: zodResolver(assessmentSchema) as Resolver<AssessmentAnswers>,
     defaultValues: emptyDefaults,
     mode: "onTouched",
   });
