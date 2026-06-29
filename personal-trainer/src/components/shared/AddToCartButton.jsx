@@ -1,7 +1,7 @@
 import { addItem } from "../../store/cart";
 
 /**
- * @param {{ product: { id: string; name: string; price: number } }} props
+ * @param {{ product: { id: string; name: string; price: number; image?: string } }} props
  */
 export default function AddToCartButton({ product }) {
   return (

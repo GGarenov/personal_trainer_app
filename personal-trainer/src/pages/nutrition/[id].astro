@@ -145,7 +145,12 @@ const trustBadges = [
             <div class="mt-6">
               <ProgramPurchase
                 client:load
-                product={{ id: plan.id, name: plan.name, price: plan.price }}
+                product={{
+                  id: plan.id,
+                  name: plan.name,
+                  price: plan.price,
+                  image: plan.image,
+                }}
                 splits={detail?.splits ?? []}
                 optionLabel={detail?.optionLabel ?? "Plan Format"}
               />
@@ -353,7 +358,12 @@ const trustBadges = [
           <div class="w-full max-w-sm">
             <ProgramPurchase
               client:visible
-              product={{ id: plan.id, name: plan.name, price: plan.price }}
+              product={{
+                id: plan.id,
+                name: plan.name,
+                price: plan.price,
+                image: plan.image,
+              }}
               splits={detail?.splits ?? []}
               optionLabel={detail?.optionLabel ?? "Plan Format"}
             />

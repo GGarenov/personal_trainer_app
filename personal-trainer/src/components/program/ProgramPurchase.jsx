@@ -9,7 +9,7 @@ function slugify(value) {
 }
 
 /**
- * @param {{ product: { id: string; name: string; price: number }; splits: string[]; optionLabel?: string }} props
+ * @param {{ product: { id: string; name: string; price: number; image?: string }; splits: string[]; optionLabel?: string }} props
  */
 export default function ProgramPurchase({
   product,
@@ -23,8 +23,10 @@ export default function ProgramPurchase({
   const handleAdd = () => {
     addItem({
       id: split ? `${product.id}--${slugify(split)}` : product.id,
-      name: split ? `${product.name} (${split})` : product.name,
+      name: product.name,
       price: product.price,
+      image: product.image,
+      variant: split || undefined,
     });
     setAdded(true);
     window.setTimeout(() => setAdded(false), 2000);
