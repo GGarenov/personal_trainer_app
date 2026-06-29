@@ -2,6 +2,7 @@ import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
 export const BLOG_PAGE_SIZE = 6;
+export const BLOG_HERO_CLASS = "min-h-[40vh] md:min-h-[48vh]";
 
 export async function getSortedBlogPosts() {
   return (await getCollection("blog")).sort(

@@ -2,12 +2,13 @@
 import BlogListing from "../../../../components/blog/BlogListing.astro";
 import PageHero from "../../../../components/shared/PageHero.astro";
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
-import heroBlogImage from "../../../../assets/blog_banner.jpg";
+import heroBlogImage from "../../../../assets/blog_banner.png";
 import {
   blogCategories,
   type BlogCategory,
 } from "../../../../lib/blogImages";
 import {
+  BLOG_HERO_CLASS,
   getBlogPageCount,
   getBlogPagePosts,
   getSortedBlogPosts,
@@ -37,7 +38,7 @@ const basePath = `/blog/category/${category}`;
       title="Blog"
       image={heroBlogImage}
       imageClass="object-contain object-center"
-      heroClass="min-h-[30vh] md:min-h-[34vh]"
+      heroClass={BLOG_HERO_CLASS}
       overlayClass="bg-gradient-to-t from-dark/90 via-dark/25 to-transparent"
     />
 
