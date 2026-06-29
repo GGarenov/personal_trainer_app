@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { PopupButton } from "react-calendly";
+import { CALENDLY_URL } from "../../config/site";
 import { buildCalendlyPrefill } from "./calendlyPrefill";
-
 const defaultClassName =
-  "rounded bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wider text-dark transition-colors hover:bg-primary/90";
-
+  "rounded bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wider text-dark transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark";
 /**
  * @param {{
- *   url: string;
+ *   url?: string;
  *   text?: string;
  *   name?: string;
  *   email?: string;
@@ -15,9 +14,8 @@ const defaultClassName =
  * }} props
  */
 export default function CalendlyButton({
-  url,
-  text = "Book a Session",
-  name,
+  url = CALENDLY_URL,
+  text = "Book a Session",  name,
   email,
   className = defaultClassName,
 }) {

@@ -21,7 +21,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <div
         class="mt-10 min-h-[630px] overflow-hidden rounded-lg border border-white/10 bg-surface"
       >
-        <CalendlyInlineEmbed client:visible url={CALENDLY_URL} />
+        <CalendlyInlineEmbed client:visible />
       </div>
 
       <p class="mt-8 text-center text-sm text-white/50">
@@ -30,7 +30,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           href={CALENDLY_URL}
           target="_blank"
           rel="noopener noreferrer"
-          class="ml-1 font-semibold text-primary transition-colors hover:text-primary/80"
+          class="ml-1 rounded-sm font-semibold text-primary underline decoration-primary/40 underline-offset-4 transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
         >
           Open Calendly in a new tab
         </a>

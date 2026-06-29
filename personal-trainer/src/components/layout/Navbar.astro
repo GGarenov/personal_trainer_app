@@ -18,31 +18,41 @@ const isActive = (href) => {
   return pathname.startsWith(href);
 };
 
+const focusRing =
+  "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+
 const linkClass = (link) => {
   const active = isActive(link.href);
 
   if (link.cta) {
     return active
-      ? "rounded bg-primary/90 px-4 py-2 text-sm font-semibold uppercase tracking-wider text-dark"
-      : "rounded bg-primary px-4 py-2 text-sm font-semibold uppercase tracking-wider text-dark transition-colors hover:bg-primary/90";
+      ? `${focusRing} rounded bg-primary/90 px-4 py-2 text-sm font-semibold uppercase tracking-wider text-dark`
+      : `${focusRing} rounded bg-primary px-4 py-2 text-sm font-semibold uppercase tracking-wider text-dark transition-colors hover:bg-primary/90`;
   }
 
-  return active
-    ? "font-semibold text-primary"
-    : "text-white hover:text-primary";
+  return `${focusRing} ${
+    active ? "font-semibold text-primary" : "text-white hover:text-primary"
+  }`;
 };
 
 const mobileLinkClass = (link) => {
   const active = isActive(link.href);
 
   if (link.cta) {
-    return active
-      ? "bg-primary/90 text-dark"
-      : "bg-primary text-dark hover:bg-primary/90";
+    return `${focusRing} ${
+      active
+        ? "bg-primary/90 text-dark"
+        : "bg-primary text-dark hover:bg-primary/90"
+    }`;
   }
 
-  return active ? "text-primary" : "text-white hover:text-primary";
+  return `${focusRing} ${active ? "text-primary" : "text-white hover:text-primary"}`;
 };
+
+const mobileLinks = [
+  ...links.filter((link) => link.cta),
+  ...links.filter((link) => !link.cta),
+];
 ---
 
 <header class="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-md">
@@ -78,6 +88,7 @@ const mobileLinkClass = (link) => {
             <a
               href={link.href}
               class={`transition-colors duration-200 ${linkClass(link)}`}
+              {...(isActive(link.href) ? { "aria-current": "page" } : {})}
             >
               {link.name}
             </a>
@@ -91,7 +102,7 @@ const mobileLinkClass = (link) => {
 
       <label
         for="menu-toggle"
-        class="cursor-pointer md:hidden"
+        class={`${focusRing} cursor-pointer p-1 md:hidden`}
         aria-label="Open menu"
       >
         <div class="space-y-1.5">
@@ -121,7 +132,7 @@ const mobileLinkClass = (link) => {
   <div class="flex items-center border-b border-white/10 bg-black px-6 py-5">
     <label
       for="menu-toggle"
-      class="cursor-pointer p-1 text-white transition-colors hover:text-primary"
+      class={`${focusRing} cursor-pointer p-1 text-white transition-colors hover:text-primary`}
       aria-label="Close menu"
     >
       <svg
@@ -140,12 +151,18 @@ const mobileLinkClass = (link) => {
 
   <ul class="flex flex-1 flex-col bg-black">
     {
-      links.map((link) => (
-        <li class="border-b border-white/10">
+      mobileLinks.map((link) => (
+        <li class:list={[link.cta ? "px-6 pt-6 pb-2" : "border-b border-white/10"]}>
           <a
             href={link.href}
             data-menu-link
-            class={`block px-6 py-4 font-heading text-2xl tracking-wider transition-colors ${mobileLinkClass(link)}`}
+            class:list={[
+              "block transition-colors",
+              link.cta
+                ? `rounded px-6 py-4 text-center font-heading text-2xl font-semibold uppercase tracking-wider ${mobileLinkClass(link)}`
+                : `px-6 py-4 font-heading text-2xl tracking-wider ${mobileLinkClass(link)}`,
+            ]}
+            {...(isActive(link.href) ? { "aria-current": "page" } : {})}
           >
             {link.name.toUpperCase()}
           </a>
@@ -166,6 +183,13 @@ const mobileLinkClass = (link) => {
     };
 
     toggle.addEventListener("change", syncMenuState);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && toggle.checked) {
+        toggle.checked = false;
+        syncMenuState();
+      }
+    });
 
     document.querySelectorAll("[data-menu-link]").forEach((link) => {
       link.addEventListener("click", () => {
