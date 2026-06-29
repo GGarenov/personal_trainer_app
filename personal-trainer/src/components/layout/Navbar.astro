@@ -8,7 +8,6 @@ const links = [
   { name: "About", href: "/about" },
   { name: "Training Programs", href: "/programs" },
   { name: "Nutrition Plans", href: "/nutrition" },
-  { name: "Find My Program", href: "/program-selector" },
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
   { name: "Book", href: "/book", cta: true },
@@ -56,28 +55,100 @@ const mobileLinks = [
 ];
 ---
 
-<header class="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-md">
+<header id="site-header" class="sticky top-0 z-50">
+  <!-- Promo / quiz bar -->
+  <div id="promo-bar" class="relative bg-primary text-dark">
+    <div class="mx-auto flex max-w-7xl items-center justify-center px-10 py-2 text-center sm:px-6">
+      <a
+        href="/program-selector"
+        class="group inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 text-xs font-medium sm:text-sm"
+      >
+        <span class="inline-flex items-center gap-1.5">
+          <svg
+            class="h-3.5 w-3.5 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M9.09 9a3 3 0 1 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          Not sure which program is right for you?
+        </span>
+        <span
+          class="inline-flex items-center gap-1 font-bold underline decoration-2 underline-offset-2 transition-all group-hover:gap-2"
+        >
+          Take the free 60-second quiz
+          <svg
+            class="h-3.5 w-3.5 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </span>
+      </a>
+      <button
+        id="promo-dismiss"
+        type="button"
+        aria-label="Dismiss"
+        class="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1.5 text-dark/60 transition-colors hover:bg-dark/10 hover:text-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark sm:right-4"
+      >
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
   <nav
     aria-label="Main navigation"
-    class="mx-auto flex h-20 max-w-7xl items-center justify-between px-6"
+    class="border-b border-white/10 bg-black/70 backdrop-blur-md"
   >
+    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
     <a
       href="/"
-      class="group flex items-center gap-3 transition-opacity hover:opacity-90"
+      class="group flex items-center gap-3"
       aria-label="George Stevens Fitness — Home"
     >
       <span
-        class="flex h-11 w-11 shrink-0 items-center justify-center border border-primary/30 font-heading text-2xl font-bold leading-none text-primary transition-colors group-hover:border-primary/60"
+        class="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary font-heading text-[1.7rem] font-bold leading-none text-dark shadow-lg shadow-primary/20 ring-1 ring-primary/50 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-primary/40"
       >
         GS
+        <span
+          class="pointer-events-none absolute -bottom-1 -right-1 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-black"
+        ></span>
       </span>
 
       <span class="flex flex-col leading-none">
-        <span class="font-heading text-lg font-bold tracking-[0.18em] text-white sm:text-xl">
-          GEORGE STEVENS
+        <span class="font-heading text-xl tracking-[0.2em] text-white sm:text-2xl">
+          GEORGE <span class="text-primary">STEVENS</span>
         </span>
-        <span class="mt-1 font-body text-[0.65rem] font-black uppercase tracking-[0.42em] text-white/75 sm:text-xs">
-          fitness
+        <span class="mt-1 flex items-center gap-2">
+          <span class="h-px w-4 bg-primary/60"></span>
+          <span class="font-body text-[0.6rem] font-bold uppercase tracking-[0.4em] text-white/60">
+            fitness
+          </span>
         </span>
       </span>
     </a>
@@ -113,6 +184,7 @@ const mobileLinks = [
         </div>
       </label>
     </div>
+    </div>
   </nav>
 </header>
 
@@ -130,7 +202,17 @@ const mobileLinks = [
   aria-label="Mobile navigation"
   aria-hidden="true"
 >
-  <div class="flex items-center border-b border-white/10 bg-black px-6 py-5">
+  <div class="flex items-center justify-between border-b border-white/10 bg-black px-6 py-5">
+    <a href="/" data-menu-link class="flex items-center gap-2" aria-label="George Stevens Fitness — Home">
+      <span
+        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary font-heading text-xl font-bold leading-none text-dark ring-1 ring-primary/50"
+      >
+        GS
+      </span>
+      <span class="font-heading text-lg tracking-[0.2em] text-white">
+        GEORGE <span class="text-primary">STEVENS</span>
+      </span>
+    </a>
     <label
       for="menu-toggle"
       class={`${focusRing} cursor-pointer p-1 text-white transition-colors hover:text-primary`}
@@ -151,6 +233,29 @@ const mobileLinks = [
   </div>
 
   <ul class="flex flex-1 flex-col bg-black">
+    <li class="border-b border-white/10">
+      <a
+        href="/program-selector"
+        data-menu-link
+        class={`${focusRing} flex items-center justify-between gap-2 bg-primary/10 px-6 py-4 font-heading text-2xl tracking-wider text-primary transition-colors hover:bg-primary/20`}
+        {...(isActive("/program-selector") ? { "aria-current": "page" } : {})}
+      >
+        FIND MY PROGRAM
+        <svg
+          class="h-5 w-5 shrink-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
+      </a>
+    </li>
     {
       mobileLinks.map((link) => (
         <li class:list={[link.cta ? "px-6 pt-6 pb-2" : "border-b border-white/10"]}>
@@ -197,6 +302,20 @@ const mobileLinks = [
         toggle.checked = false;
         syncMenuState();
       });
+    });
+  }
+
+  const promoBar = document.getElementById("promo-bar");
+  const promoDismiss = document.getElementById("promo-dismiss");
+
+  if (promoBar && promoDismiss) {
+    if (sessionStorage.getItem("promoDismissed") === "true") {
+      promoBar.style.display = "none";
+    }
+
+    promoDismiss.addEventListener("click", () => {
+      promoBar.style.display = "none";
+      sessionStorage.setItem("promoDismissed", "true");
     });
   }
 </script>
