@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Order Confirmed — George Stevens"
+  description="Your demo order has been placed successfully."
+>
+  <main class="mx-auto max-w-2xl px-6 py-24 text-center md:py-32">
+    <div
+      class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/20"
+      aria-hidden="true"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-8 w-8 text-primary"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M5 13l4 4L19 7"></path>
+      </svg>
+    </div>
+
+    <h1 class="mt-8 font-heading text-5xl tracking-wider text-white">
+      Thank You!
+    </h1>
+    <p class="mt-4 text-lg text-white/70">
+      Your demo order has been placed. This was a training exercise — no
+      payment was processed and no products were delivered.
+    </p>
+
+    <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <a
+        href="/programs"
+        class="rounded bg-primary px-8 py-3 text-sm font-bold uppercase tracking-wider text-dark transition-colors hover:bg-primary/90"
+      >
+        Browse Programs
+      </a>
+      <a
+        href="/book"
+        class="rounded border border-white/20 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:border-primary hover:text-primary"
+      >
+        Book a Call
+      </a>
+    </div>
+  </main>
+</BaseLayout>

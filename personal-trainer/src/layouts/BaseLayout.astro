@@ -1,6 +1,7 @@
 ---
 import Footer from "../components/layout/Footer.astro";
 import Navbar from "../components/layout/Navbar.astro";
+import CartDrawer from "../components/cart/CartDrawer.jsx";
 import defaultOgImage from "../assets/banner.png";
 import "../styles/global.css";
 
@@ -57,6 +58,7 @@ const ogImageURL = new URL(ogImage.src, site);
       Skip to main content
     </a>
     <Navbar />
+    <CartDrawer client:load />
     <div id="main-content">
       <slot />
     </div>

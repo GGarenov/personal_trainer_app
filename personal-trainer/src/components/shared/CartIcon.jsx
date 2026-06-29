@@ -1,5 +1,5 @@
 import { useStore } from "@nanostores/react";
-import { cartStore } from "../../store/cart";
+import { cartStore, openCart } from "../../store/cart";
 
 export default function CartIcon() {
   const cart = useStore(cartStore);
@@ -8,8 +8,10 @@ export default function CartIcon() {
   return (
     <button
       type="button"
+      onClick={() => openCart()}
       className="relative"
       aria-label={`Shopping cart, ${count} items`}
+      aria-haspopup="dialog"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
