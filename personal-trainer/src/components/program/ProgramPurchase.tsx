@@ -1,21 +1,24 @@
 import { useState } from "react";
-import { addItem } from "../../store/cart";
+import { addItem, type CartProductInput } from "../../store/cart";
 
-function slugify(value) {
+function slugify(value: string): string {
   return value
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
 
-/**
- * @param {{ product: { id: string; name: string; price: number; image?: string }; splits: string[]; optionLabel?: string }} props
- */
+interface ProgramPurchaseProps {
+  product: CartProductInput;
+  splits?: string[];
+  optionLabel?: string;
+}
+
 export default function ProgramPurchase({
   product,
   splits = [],
   optionLabel = "Training Split",
-}) {
+}: ProgramPurchaseProps) {
   const hasSplits = splits.length > 0;
   const [split, setSplit] = useState(hasSplits ? splits[0] : "");
   const [added, setAdded] = useState(false);

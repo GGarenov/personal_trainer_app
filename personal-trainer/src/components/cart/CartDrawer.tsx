@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useStore } from "@nanostores/react";
+import { formatPrice } from "../../lib/formatPrice";
 import { productImageMap } from "../../lib/productImages";
 import {
   cartDrawerOpen,
@@ -8,20 +9,17 @@ import {
   getItemCount,
   removeItem,
   updateQuantity,
+  type CartItem,
 } from "../../store/cart";
 
 const fallbackImage = productImageMap["image_four.jpg"];
 
-function getProductImageSrc(image) {
+function getProductImageSrc(image?: string): string {
   const meta = image ? productImageMap[image] : null;
   return (meta ?? fallbackImage).src;
 }
 
-function formatPrice(amount) {
-  return `€${amount}`;
-}
-
-function BagIcon({ className }) {
+function BagIcon({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +39,7 @@ function BagIcon({ className }) {
   );
 }
 
-function LockIcon({ className }) {
+function LockIcon({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +59,7 @@ function LockIcon({ className }) {
   );
 }
 
-function CartLineItem({ item }) {
+function CartLineItem({ item }: { item: CartItem }) {
   return (
     <li className="flex gap-4 border-b border-white/10 py-5">
       <img
@@ -127,8 +125,8 @@ function CartLineItem({ item }) {
 export default function CartDrawer() {
   const isOpen = useStore(cartDrawerOpen);
   const cart = useStore(cartStore);
-  const panelRef = useRef(null);
-  const closeButtonRef = useRef(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const itemCount = getItemCount();
   const hasItems = cart.items.length > 0;
   const itemLabel = itemCount === 1 ? "1 ITEM" : `${itemCount} ITEMS`;
@@ -148,13 +146,13 @@ export default function CartDrawer() {
     closeButtonRef.current?.focus();
 
     const panel = panelRef.current;
-    const focusables = panel.querySelectorAll(
+    const focusables = panel.querySelectorAll<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
     const first = focusables[0];
     const last = focusables[focusables.length - 1];
 
-    function handleKeyDown(event) {
+    function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         closeCart();
         return;

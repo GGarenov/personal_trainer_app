@@ -1,4 +1,9 @@
-import { useState } from "react";
+import {
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { clearCart } from "../../store/cart";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -9,7 +14,25 @@ const inputClass =
 
 const labelClass = "mb-2 block text-sm font-medium text-white/80";
 
-const initialValues = {
+interface CheckoutFormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  cardNumber: string;
+  expiry: string;
+  cvv: string;
+  agreeTerms: boolean;
+}
+
+type CheckoutFormErrors = Partial<Record<keyof CheckoutFormValues, string>>;
+
+const initialValues: CheckoutFormValues = {
   firstName: "",
   lastName: "",
   email: "",
@@ -25,26 +48,25 @@ const initialValues = {
   agreeTerms: false,
 };
 
-function digitsOnly(value) {
+function digitsOnly(value: string): string {
   return value.replace(/\D/g, "");
 }
 
-function formatCardNumber(value) {
+function formatCardNumber(value: string): string {
   return digitsOnly(value)
     .slice(0, 19)
     .replace(/(\d{4})(?=\d)/g, "$1 ")
     .trim();
 }
 
-function formatExpiry(value) {
+function formatExpiry(value: string): string {
   const digits = digitsOnly(value).slice(0, 4);
   if (digits.length <= 2) return digits;
   return `${digits.slice(0, 2)}/${digits.slice(2)}`;
 }
 
-function validate(values) {
-  /** @type {Record<string, string>} */
-  const errors = {};
+function validate(values: CheckoutFormValues): CheckoutFormErrors {
+  const errors: CheckoutFormErrors = {};
 
   if (!values.firstName.trim()) errors.firstName = "First name is required.";
   if (!values.lastName.trim()) errors.lastName = "Last name is required.";
@@ -86,7 +108,14 @@ function validate(values) {
   return errors;
 }
 
-function Field({ id, label, error, children }) {
+interface FieldProps {
+  id: string;
+  label: string;
+  error?: string;
+  children: ReactNode;
+}
+
+function Field({ id, label, error, children }: FieldProps) {
   return (
     <div>
       <label htmlFor={id} className={labelClass}>
@@ -103,10 +132,10 @@ function Field({ id, label, error, children }) {
 }
 
 export default function CheckoutForm() {
-  const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState({});
+  const [values, setValues] = useState<CheckoutFormValues>(initialValues);
+  const [errors, setErrors] = useState<CheckoutFormErrors>({});
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = event.target;
     const nextValue = type === "checkbox" ? checked : value;
 
@@ -114,7 +143,7 @@ export default function CheckoutForm() {
     setErrors((current) => ({ ...current, [name]: "" }));
   };
 
-  const handleCardNumberChange = (event) => {
+  const handleCardNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValues((current) => ({
       ...current,
       cardNumber: formatCardNumber(event.target.value),
@@ -122,7 +151,7 @@ export default function CheckoutForm() {
     setErrors((current) => ({ ...current, cardNumber: "" }));
   };
 
-  const handleExpiryChange = (event) => {
+  const handleExpiryChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValues((current) => ({
       ...current,
       expiry: formatExpiry(event.target.value),
@@ -130,7 +159,7 @@ export default function CheckoutForm() {
     setErrors((current) => ({ ...current, expiry: "" }));
   };
 
-  const handleCvvChange = (event) => {
+  const handleCvvChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValues((current) => ({
       ...current,
       cvv: digitsOnly(event.target.value).slice(0, 4),
@@ -138,7 +167,7 @@ export default function CheckoutForm() {
     setErrors((current) => ({ ...current, cvv: "" }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const validationErrors = validate(values);

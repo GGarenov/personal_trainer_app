@@ -1,9 +1,10 @@
-import { addItem } from "../../store/cart";
+import { addItem, type CartProductInput } from "../../store/cart";
 
-/**
- * @param {{ product: { id: string; name: string; price: number; image?: string } }} props
- */
-export default function AddToCartButton({ product }) {
+interface AddToCartButtonProps {
+  product: CartProductInput;
+}
+
+export default function AddToCartButton({ product }: AddToCartButtonProps) {
   return (
     <button
       type="button"

@@ -2,20 +2,19 @@ import { InlineWidget } from "react-calendly";
 import { CALENDLY_URL } from "../../config/site";
 import { buildCalendlyPrefill } from "./calendlyPrefill";
 
-/**
- * @param {{
- *   url?: string;
- *   name?: string;
- *   email?: string;
- *   className?: string;
- * }} props
- */
+interface CalendlyInlineEmbedProps {
+  url?: string;
+  name?: string;
+  email?: string;
+  className?: string;
+}
+
 export default function CalendlyInlineEmbed({
   url = CALENDLY_URL,
   name,
   email,
   className = "calendly-inline-widget h-full w-full",
-}) {
+}: CalendlyInlineEmbedProps) {
   return (
     <InlineWidget
       url={url}

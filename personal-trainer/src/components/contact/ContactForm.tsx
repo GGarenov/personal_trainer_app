@@ -1,14 +1,27 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import emailjs from "@emailjs/browser";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/**
- * @param {{ name: string; email: string; subject: string; message: string }} values
- */
-function validate(values) {
-  /** @type {Record<string, string>} */
-  const errors = {};
+interface ContactFormValues {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+type FormErrors = Partial<Record<keyof ContactFormValues, string>>;
+type FormStatus = "idle" | "submitting" | "success" | "error";
+
+const emptyValues: ContactFormValues = {
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
+};
+
+function validate(values: ContactFormValues): FormErrors {
+  const errors: FormErrors = {};
 
   if (!values.name.trim()) {
     errors.name = "Name is required.";
@@ -37,24 +50,21 @@ const inputClass =
 const labelClass = "mb-2 block text-sm font-medium text-white/80";
 
 export default function ContactForm() {
-  const [values, setValues] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
+  const [values, setValues] = useState<ContactFormValues>(emptyValues);
   const [honeypot, setHoneypot] = useState("");
-  const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState("idle");
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [status, setStatus] = useState<FormStatus>("idle");
 
-  const handleChange = (event) => {
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = event.target;
     setValues((current) => ({ ...current, [name]: value }));
     setErrors((current) => ({ ...current, [name]: "" }));
     if (status !== "idle") setStatus("idle");
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const validationErrors = validate(values);
@@ -68,7 +78,7 @@ export default function ContactForm() {
 
     if (honeypot.trim()) {
       setStatus("success");
-      setValues({ name: "", email: "", subject: "", message: "" });
+      setValues(emptyValues);
       setHoneypot("");
       return;
     }
@@ -88,11 +98,11 @@ export default function ContactForm() {
           publicKey: import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY,
           blockHeadless: true,
           limitRate: { id: "contact-form", throttle: 60_000 },
-        }
+        },
       );
 
       setStatus("success");
-      setValues({ name: "", email: "", subject: "", message: "" });
+      setValues(emptyValues);
       setHoneypot("");
     } catch (error) {
       console.error("EmailJS error:", error);
