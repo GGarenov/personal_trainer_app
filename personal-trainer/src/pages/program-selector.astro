@@ -1,0 +1,21 @@
+---
+import TrainingAssessment from "../components/assessment/TrainingAssessment";
+import { trainingPrograms } from "../data/products";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getProductCover } from "../lib/productImages";
+
+const programCovers = trainingPrograms.map((program) => ({
+  id: program.id,
+  name: program.name,
+  image: getProductCover(program.image).src,
+}));
+---
+
+<BaseLayout
+  title="Find My Program — Gary Bean"
+  description="Take a free quiz to get matched with the best training program for your goals, experience, and schedule."
+>
+  <main>
+    <TrainingAssessment client:load programCovers={programCovers} />
+  </main>
+</BaseLayout>
