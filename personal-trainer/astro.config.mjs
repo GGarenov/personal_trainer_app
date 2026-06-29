@@ -6,7 +6,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
 // Update this to your real domain before deploying
-const SITE = "https://garybean.com";
+const SITE = "https://personaltrainergeorge.netlify.app/";
 
 // https://astro.build/config
 export default defineConfig({
