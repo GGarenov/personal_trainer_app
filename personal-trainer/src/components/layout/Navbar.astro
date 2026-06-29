@@ -28,9 +28,23 @@ const isActive = (href) => {
 
     <a
       href="/"
-      class="font-heading text-2xl font-bold tracking-wider text-white"
+      class="group flex items-center gap-3 transition-opacity hover:opacity-90"
+      aria-label="George Stevens Fitness — Home"
     >
-      TRAINER
+      <span
+        class="flex h-11 w-11 shrink-0 items-center justify-center border border-primary/30 font-heading text-2xl font-bold leading-none text-primary transition-colors group-hover:border-primary/60"
+      >
+        GS
+      </span>
+
+      <span class="flex flex-col leading-none">
+        <span class="font-heading text-lg font-bold tracking-[0.18em] text-white sm:text-xl">
+          GEORGE STEVENS
+        </span>
+        <span class="mt-1 font-body text-[0.65rem] font-black uppercase tracking-[0.42em] text-white/75 sm:text-xs">
+          fitness
+        </span>
+      </span>
     </a>
 
     <!-- MOBILE TOGGLE -->
