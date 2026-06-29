@@ -14,14 +14,16 @@ export default function CalendlyInlineEmbed({
   url = CALENDLY_URL,
   name,
   email,
-  className = "calendly-inline-widget min-h-[630px] w-full",
+  className = "calendly-inline-widget h-full w-full",
 }) {
   return (
     <InlineWidget
       url={url}
       prefill={buildCalendlyPrefill({ name, email })}
+      pageSettings={{ hideGdprBanner: true }}
+      iframeTitle="Book a call with George Stevens"
       className={className}
-      styles={{ minWidth: "320px", height: "100%", minHeight: "630px" }}
+      styles={{ width: "100%", height: "100%", minWidth: "320px" }}
     />
   );
 }

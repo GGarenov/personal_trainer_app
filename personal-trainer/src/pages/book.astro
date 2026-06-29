@@ -1,6 +1,8 @@
 ---
 import CalendlyInlineEmbed from "../components/booking/CalendlyInlineEmbed.jsx";
-import PageHero from "../components/shared/PageHero.astro";
+import { Image } from "astro:assets";
+import Button from "../components/shared/Button.astro";
+import bookMe from "../assets/book_me.png";
 import { CALENDLY_URL } from "../config/site";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
@@ -10,30 +12,99 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   description="Schedule a free consultation to discuss your training goals and get a personalized coaching plan."
 >
   <main>
-    <PageHero title="Book a Session" />
+    <section class="relative border-b border-white/10 bg-surface/50">
+      <div class="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-2 md:items-center md:py-16">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+            Book a Free Call
+          </p>
+          <h1 class="mt-4 font-heading text-5xl leading-none tracking-wider text-white md:text-6xl">
+            Let&apos;s Build Your Best Plan
+          </h1>
+          <p class="mt-5 max-w-xl text-lg text-white/75">
+            Book a quick call with me so we can discuss your goals, your
+            schedule, and exactly what approach fits your body and lifestyle.
+          </p>
 
-    <section class="mx-auto max-w-5xl px-6 py-12 md:py-16">
-      <p class="text-center text-white/70">
-        Pick a time that works for you. Takes about 30 seconds — no payment
-        required.
-      </p>
+          <ul class="mt-6 space-y-2 text-white/70">
+            <li>- 100% free consultation</li>
+            <li>- Clear next steps tailored to you</li>
+            <li>- Online coaching options worldwide</li>
+          </ul>
 
-      <div
-        class="mt-10 min-h-[630px] overflow-hidden rounded-lg border border-white/10 bg-surface"
-      >
-        <CalendlyInlineEmbed client:visible />
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+            <Button
+              href={CALENDLY_URL}
+              class="w-full text-center sm:w-auto"
+            >
+              Open Booking Calendar
+            </Button>
+            <Button
+              href="/programs"
+              variant="outline"
+              class="w-full text-center sm:w-auto"
+            >
+              View Programs
+            </Button>
+          </div>
+
+          <p class="mt-4 text-sm text-white/50">
+            If the embedded scheduler fails to load, use
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="ml-1 rounded-sm font-semibold text-primary underline decoration-primary/40 underline-offset-4 transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
+            >
+              this direct Calendly link
+            </a>.
+          </p>
+        </div>
+
+        <div class="mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-dark/60">
+          <Image
+            src={bookMe}
+            alt="George Stevens ready to discuss your training goals"
+            class="h-full w-full object-cover"
+            widths={[480, 720, 960]}
+            sizes="(max-width: 768px) 100vw, 40vw"
+            loading="eager"
+            quality={80}
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-6xl px-6 py-12 md:py-16">
+      <div class="mb-6 flex items-center justify-between gap-4">
+        <h2 class="font-heading text-3xl tracking-wider text-white md:text-4xl">
+          Instant Scheduler
+        </h2>
+        <a
+          href={CALENDLY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded bg-primary px-5 py-2 text-xs font-semibold uppercase tracking-wider text-dark transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
+        >
+          Open in New Tab
+        </a>
       </div>
 
-      <p class="mt-8 text-center text-sm text-white/50">
-        Having trouble with the scheduler?
+      <div class="h-[740px] overflow-hidden rounded-lg border border-white/10 bg-surface md:h-[820px]">
+        <CalendlyInlineEmbed client:load />
+      </div>
+
+      <p class="mt-4 text-center text-sm text-white/50">
+        If this embed looks cropped in your browser, click
         <a
           href={CALENDLY_URL}
           target="_blank"
           rel="noopener noreferrer"
           class="ml-1 rounded-sm font-semibold text-primary underline decoration-primary/40 underline-offset-4 transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
         >
-          Open Calendly in a new tab
+          Open in New Tab
         </a>
+        for full-screen booking.
       </p>
     </section>
   </main>
