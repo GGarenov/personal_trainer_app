@@ -43,6 +43,7 @@ export default function ContactForm() {
     subject: "",
     message: "",
   });
+  const [honeypot, setHoneypot] = useState("");
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle");
 
@@ -65,6 +66,13 @@ export default function ContactForm() {
     setStatus("submitting");
     setErrors({});
 
+    if (honeypot.trim()) {
+      setStatus("success");
+      setValues({ name: "", email: "", subject: "", message: "" });
+      setHoneypot("");
+      return;
+    }
+
     try {
       await emailjs.send(
         import.meta.env.PUBLIC_EMAILJS_SERVICE_ID,
@@ -76,11 +84,16 @@ export default function ContactForm() {
           message: values.message.trim(),
           reply_to: values.email.trim(),
         },
-        import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY
+        {
+          publicKey: import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY,
+          blockHeadless: true,
+          limitRate: { id: "contact-form", throttle: 60_000 },
+        }
       );
 
       setStatus("success");
       setValues({ name: "", email: "", subject: "", message: "" });
+      setHoneypot("");
     } catch (error) {
       console.error("EmailJS error:", error);
       setStatus("error");
@@ -88,7 +101,23 @@ export default function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+    <form onSubmit={handleSubmit} className="relative space-y-5" noValidate>
+      <div
+        className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+        aria-hidden="true"
+      >
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          value={honeypot}
+          onChange={(event) => setHoneypot(event.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       <div>
         <label htmlFor="name" className={labelClass}>
           Name
