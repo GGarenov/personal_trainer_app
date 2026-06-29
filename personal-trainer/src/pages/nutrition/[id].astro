@@ -1,0 +1,371 @@
+---
+import { Image } from "astro:assets";
+import ProgramPurchase from "../../components/program/ProgramPurchase.jsx";
+import { getProductCover } from "../../lib/productImages";
+import { nutritionPlans, type Product } from "../../data/products";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  return nutritionPlans.map((plan) => ({
+    params: { id: plan.id },
+    props: { plan },
+  }));
+}
+
+interface Props {
+  plan: Product;
+}
+
+const { plan } = Astro.props;
+const detail = plan.detail;
+const cover = getProductCover(plan.image);
+
+const ratingValue = detail?.rating ?? 0;
+const fullStars = Math.round(ratingValue);
+
+const iconPaths: Record<string, string> = {
+  macros:
+    "M12 3v2m0 14v2m-8.485-15.485l1.414 1.414M3 12h2m14 0h2M4.929 19.071l1.414-1.414M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5",
+  meal:
+    "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4",
+  cardio:
+    "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z",
+  supplements:
+    "M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z",
+  sleep:
+    "M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z",
+  training: "M13 10V3L4 14h7v7l9-11h-7z",
+  timing: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
+  coaching:
+    "M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222",
+};
+
+const trustBadges = [
+  { label: "Instant Access", icon: "M13 10V3L4 14h7v7l9-11h-7z" },
+  {
+    label: "Free e-Delivery",
+    icon: "M3 7h13v8H3z M16 10h3l2 3v2h-5z M7.5 17a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z M19.5 17a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z",
+  },
+  {
+    label: "Money Back Guarantee",
+    icon: "M12 2a10 10 0 100 20 10 10 0 000-20z M9.5 12l1.8 1.8L15 9.8",
+  },
+];
+---
+
+<BaseLayout
+  title={`${plan.name} — Gary Bean`}
+  description={detail?.tagline ?? `${plan.name} nutrition plan.`}
+  ogImage={cover}
+  ogType="product"
+>
+  <main>
+    <!-- Product header -->
+    <section class="border-b border-white/10 bg-surface/40">
+      <div class="mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <nav aria-label="Breadcrumb" class="mb-6">
+          <ol class="flex flex-wrap items-center gap-2 text-sm text-white/50">
+            <li><a href="/" class="transition-colors hover:text-primary">Home</a></li>
+            <li><span aria-hidden="true">/</span></li>
+            <li>
+              <a href="/nutrition" class="transition-colors hover:text-primary">
+                Nutrition Plans
+              </a>
+            </li>
+            <li><span aria-hidden="true">/</span></li>
+            <li><span class="text-white/80">{plan.name}</span></li>
+          </ol>
+        </nav>
+
+        <div class="grid gap-10 md:grid-cols-2 md:items-start">
+          <div class="overflow-hidden rounded-2xl border border-white/10 bg-dark">
+            <Image
+              src={cover}
+              alt={plan.name}
+              class="aspect-square w-full object-cover"
+              widths={[480, 720, 960]}
+              sizes="(max-width: 768px) 100vw, 45vw"
+              loading="eager"
+              decoding="async"
+              quality={80}
+            />
+          </div>
+
+          <div class="md:py-2">
+            {
+              detail?.badges && detail.badges.length > 0 && (
+                <div class="mb-4 flex flex-wrap gap-2">
+                  {detail.badges.map((badge) => (
+                    <span class="rounded bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wider text-dark">
+                      {badge}
+                    </span>
+                  ))}
+                </div>
+              )
+            }
+
+            <h1 class="font-heading text-4xl tracking-wider text-white md:text-5xl">
+              {plan.name}
+            </h1>
+
+            {
+              detail?.tagline && (
+                <p class="mt-4 text-base text-white/70">{detail.tagline}</p>
+              )
+            }
+
+            {
+              detail && (
+                <div class="mt-5 flex items-center gap-3">
+                  <div class="flex" aria-hidden="true">
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <svg
+                        class:list={[
+                          "h-5 w-5",
+                          index < fullStars ? "text-primary" : "text-white/20",
+                        ]}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.447a1 1 0 00-.364 1.118l1.287 3.957c.3.922-.755 1.688-1.54 1.118l-3.367-2.447a1 1 0 00-1.175 0l-3.367 2.447c-.784.57-1.838-.196-1.539-1.118l1.286-3.957a1 1 0 00-.363-1.118L2.075 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <span class="text-sm text-white/60">
+                    {ratingValue.toFixed(1)} · {detail.reviews} reviews
+                  </span>
+                </div>
+              )
+            }
+
+            <p class="mt-6 font-heading text-5xl tracking-wide text-primary">
+              €{plan.price}
+            </p>
+
+            <div class="mt-6">
+              <ProgramPurchase
+                client:load
+                product={{ id: plan.id, name: plan.name, price: plan.price }}
+                splits={detail?.splits ?? []}
+                optionLabel={detail?.optionLabel ?? "Plan Format"}
+              />
+            </div>
+
+            {
+              detail?.includedItems && detail.includedItems.length > 0 && (
+                <div class="mt-8 border-t border-white/10 pt-6">
+                  <p class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
+                    What's included
+                  </p>
+                  <ul class="space-y-2">
+                    {detail.includedItems.map((item) => (
+                      <li class="flex items-center gap-2 text-sm text-white/80">
+                        <span class="text-primary" aria-hidden="true">✓</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            }
+
+            <div class="mt-8 grid grid-cols-3 gap-4 border-t border-white/10 pt-6">
+              {
+                trustBadges.map((badge) => (
+                  <div class="flex flex-col items-center gap-2 text-center">
+                    <svg
+                      class="h-7 w-7 text-primary"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d={badge.icon}
+                      />
+                    </svg>
+                    <span class="text-xs text-white/60">{badge.label}</span>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- You Will Get -->
+    {
+      detail?.youWillGet && detail.youWillGet.length > 0 && (
+        <section class="mx-auto max-w-7xl px-6 py-16 md:py-24">
+          <h2 class="font-heading text-3xl tracking-wider text-white md:text-4xl">
+            You Will Get
+          </h2>
+          {detail.youWillGetIntro && (
+            <p class="mt-3 max-w-2xl text-white/60">{detail.youWillGetIntro}</p>
+          )}
+
+          <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {detail.youWillGet.map((card) => (
+              <article class="flex flex-col rounded-xl border border-white/10 bg-surface p-6 transition-colors hover:border-white/20">
+                <span class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <svg
+                    class="h-6 w-6 text-primary"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d={iconPaths[card.icon] ?? iconPaths.meal}
+                    />
+                  </svg>
+                </span>
+                <h3 class="font-heading text-xl tracking-wide text-white">
+                  {card.title}
+                </h3>
+                <p class="mt-3 text-sm leading-relaxed text-white/70">
+                  {card.body}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- What's New -->
+    {
+      detail?.whatsNew && detail.whatsNew.length > 0 && (
+        <section class="border-y border-white/10 bg-surface/40 py-16 md:py-24">
+          <div class="mx-auto max-w-7xl px-6">
+            <h2 class="mb-10 font-heading text-3xl tracking-wider text-white md:text-4xl">
+              What's New?
+            </h2>
+            <div class="grid gap-10 md:grid-cols-2 md:items-start">
+              <div class="space-y-3">
+                {detail.whatsNew.map((feature, index) => (
+                  <details
+                    class="group rounded-xl border border-white/10 bg-dark px-5 py-4 transition-colors hover:border-white/20"
+                    open={index === 0}
+                  >
+                    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-heading text-xl tracking-wide text-white">
+                      <span class="flex items-center gap-3">
+                        <svg
+                          class="h-5 w-5 shrink-0 text-primary"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        {feature.title}
+                      </span>
+                      <span
+                        class="text-2xl leading-none text-white/40 transition-transform group-open:rotate-45"
+                        aria-hidden="true"
+                      >
+                        +
+                      </span>
+                    </summary>
+                    <p class="mt-3 pl-8 text-sm leading-relaxed text-white/70">
+                      {feature.body}
+                    </p>
+                  </details>
+                ))}
+              </div>
+
+              <div class="flex h-full items-center justify-center rounded-2xl border border-white/10 bg-dark p-8">
+                <div class="text-center">
+                  <p class="font-heading text-6xl tracking-wide text-primary">
+                    {ratingValue.toFixed(1)}/5
+                  </p>
+                  <p class="mt-2 text-sm text-white/60">
+                    Rated by {detail.reviews} clients
+                  </p>
+                  <p class="mt-6 max-w-xs text-sm leading-relaxed text-white/70">
+                    A complete, science-based nutrition system you can follow
+                    from your phone — built to deliver results that last.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- FAQ -->
+    {
+      detail?.faqs && detail.faqs.length > 0 && (
+        <section class="mx-auto max-w-3xl px-6 py-16 md:py-24">
+          <h2 class="mb-10 font-heading text-3xl tracking-wider text-white md:text-4xl">
+            Frequently Asked Questions
+          </h2>
+          <div class="space-y-3">
+            {detail.faqs.map((faq) => (
+              <details class="group rounded-xl border border-white/10 bg-surface px-5 py-4 transition-colors hover:border-white/20">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-white">
+                  {faq.question}
+                  <span
+                    class="text-2xl leading-none text-white/40 transition-transform group-open:rotate-45"
+                    aria-hidden="true"
+                  >
+                    +
+                  </span>
+                </summary>
+                <p class="mt-3 text-sm leading-relaxed text-white/70">
+                  {faq.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Bottom CTA -->
+    <section class="border-t border-white/10 bg-surface/40">
+      <div class="mx-auto max-w-7xl px-6 py-16 md:py-24">
+        <div class="flex flex-col items-center gap-6 rounded-2xl border border-white/10 bg-dark px-8 py-12 text-center">
+          <h2 class="font-heading text-3xl tracking-wider text-white md:text-4xl">
+            Ready to start the {plan.name}?
+          </h2>
+          <p class="max-w-xl text-white/70">
+            Get instant access to the full nutrition plan, meal guides and
+            tracking tools — and start eating with purpose today.
+          </p>
+          <p class="font-heading text-4xl tracking-wide text-primary">
+            €{plan.price}
+          </p>
+          <div class="w-full max-w-sm">
+            <ProgramPurchase
+              client:visible
+              product={{ id: plan.id, name: plan.name, price: plan.price }}
+              splits={detail?.splits ?? []}
+              optionLabel={detail?.optionLabel ?? "Plan Format"}
+            />
+          </div>
+          <a
+            href="/nutrition"
+            class="text-sm text-white/60 underline decoration-white/30 underline-offset-4 transition-colors hover:text-primary"
+          >
+            Browse all nutrition plans
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

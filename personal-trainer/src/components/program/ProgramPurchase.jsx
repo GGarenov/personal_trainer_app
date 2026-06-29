@@ -9,9 +9,13 @@ function slugify(value) {
 }
 
 /**
- * @param {{ product: { id: string; name: string; price: number }; splits: string[] }} props
+ * @param {{ product: { id: string; name: string; price: number }; splits: string[]; optionLabel?: string }} props
  */
-export default function ProgramPurchase({ product, splits = [] }) {
+export default function ProgramPurchase({
+  product,
+  splits = [],
+  optionLabel = "Training Split",
+}) {
   const hasSplits = splits.length > 0;
   const [split, setSplit] = useState(hasSplits ? splits[0] : "");
   const [added, setAdded] = useState(false);
@@ -34,7 +38,7 @@ export default function ProgramPurchase({ product, splits = [] }) {
             htmlFor="training-split"
             className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-white/60"
           >
-            Training Split
+            {optionLabel}
           </label>
           <div className="relative">
             <select

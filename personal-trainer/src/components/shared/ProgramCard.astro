@@ -6,10 +6,12 @@ import AddToCartButton from "./AddToCartButton.jsx";
 
 interface Props {
   program: Product;
+  basePath?: string;
 }
 
-const { program } = Astro.props;
+const { program, basePath = "/programs" } = Astro.props;
 const cover = getProductCover(program.image);
+const href = `${basePath}/${program.id}`;
 ---
 
 <article
@@ -24,7 +26,7 @@ const cover = getProductCover(program.image);
   }
 
   <a
-    href={`/programs/${program.id}`}
+    href={href}
     class="group block overflow-hidden"
     aria-label={`View ${program.name}`}
   >
@@ -42,10 +44,7 @@ const cover = getProductCover(program.image);
 
   <div class="flex flex-1 flex-col p-6">
     <h3 class="font-heading text-3xl tracking-wide text-white">
-      <a
-        href={`/programs/${program.id}`}
-        class="transition-colors hover:text-primary"
-      >
+      <a href={href} class="transition-colors hover:text-primary">
         {program.name}
       </a>
     </h3>
@@ -67,10 +66,10 @@ const cover = getProductCover(program.image);
 
     <div class="mt-4 flex flex-col gap-3">
       <a
-        href={`/programs/${program.id}`}
+        href={href}
         class="rounded border border-white/20 px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:border-primary hover:text-primary"
       >
-        View Program
+        View Details
       </a>
       <AddToCartButton
         client:visible
