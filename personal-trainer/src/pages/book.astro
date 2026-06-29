@@ -1,0 +1,40 @@
+---
+import CalendlyInlineEmbed from "../components/booking/CalendlyInlineEmbed.jsx";
+import PageHero from "../components/shared/PageHero.astro";
+import { CALENDLY_URL } from "../config/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Book a Session — Gary Bean"
+  description="Schedule a free consultation to discuss your training goals and get a personalized coaching plan."
+>
+  <main>
+    <PageHero title="Book a Session" />
+
+    <section class="mx-auto max-w-5xl px-6 py-12 md:py-16">
+      <p class="text-center text-white/70">
+        Pick a time that works for you. Takes about 30 seconds — no payment
+        required.
+      </p>
+
+      <div
+        class="mt-10 min-h-[630px] overflow-hidden rounded-lg border border-white/10 bg-surface"
+      >
+        <CalendlyInlineEmbed client:visible url={CALENDLY_URL} />
+      </div>
+
+      <p class="mt-8 text-center text-sm text-white/50">
+        Having trouble with the scheduler?
+        <a
+          href={CALENDLY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="ml-1 font-semibold text-primary transition-colors hover:text-primary/80"
+        >
+          Open Calendly in a new tab
+        </a>
+      </p>
+    </section>
+  </main>
+</BaseLayout>
