@@ -1,74 +1,102 @@
-# George Stevens Fitness
+<p align="center">
+  <img src="docs/logo.svg" alt="Logo" width="96" />
+</p>
 
-Marketing site for a personal training and nutrition coaching business. Built as a static Astro site with React islands for interactive features (cart, contact form, program assessment quiz, Calendly booking).
+<h1 align="center">George Stevens Fitness</h1>
+
+<p align="center">
+  A marketing and e-commerce site for a personal trainer: training programs and nutrition plans with a cart, a quiz that recommends a program, a blog, online booking and a contact form. Built with Astro, with React islands for the interactive parts.
+</p>
+
+<p align="center">
+  <a href="https://beantrainingcoach.netlify.app/"><b>🌐 Live demo</b></a>
+</p>
+
+![Home page](docs/screenshots/home.jpg)
+
+## Screenshots
+
+| Training programs | Cart drawer |
+| --- | --- |
+| ![Training programs](docs/screenshots/programs.jpg) | ![Cart](docs/screenshots/cart.jpg) |
+
+| Program quiz | Quiz result |
+| --- | --- |
+| ![Quiz](docs/screenshots/quiz.jpg) | ![Quiz result](docs/screenshots/quiz-result.jpg) |
+
+| Blog with categories | Mobile |
+| --- | --- |
+| ![Blog](docs/screenshots/blog.jpg) | <img src="docs/screenshots/mobile.jpg" alt="Mobile view" width="260" /> |
+
+## Features
+
+- **Program quiz.** Four steps (personal info, experience, goal, days per week), each validated with Zod before you can continue. Rules in `recommendTrainingProgram.ts` pick a program and explain why it fits.
+- **Shop.** Training programs and nutrition plans with detail pages, a cart drawer, quantity controls and a checkout form with validation. The cart is a Nanostores store saved to `localStorage`, so it survives reloads. Checkout is a demo: no card data is sent anywhere.
+- **Blog.** 15 Markdown posts in an Astro content collection with a typed schema, category tabs and pagination, all generated as static pages.
+- **Booking.** An embedded Calendly calendar for free calls.
+- **Contact form.** Sends email through EmailJS straight from the browser, with a honeypot field and rate limiting against spam.
+- **Performance and SEO.** Pages are static HTML. Images are converted to WebP and resized at build time. A sitemap is generated automatically.
+- **Accessibility.** "Skip to main content" link, labelled navigation, keyboard focus styles, and a progress bar with ARIA values in the quiz.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    subgraph Build["Build time · astro build"]
+        MD["Markdown blog posts<br/>content collection + Zod schema"]
+        Data["Product data<br/>trainingPrograms.ts · nutritionPlans.ts"]
+        Img["Images<br/>src/assets"]
+        Astro["Astro<br/>static pages + image optimisation"]
+        MD --> Astro
+        Data --> Astro
+        Img --> Astro
+    end
+
+    subgraph Site["Netlify CDN"]
+        HTML["39 static HTML pages<br/>WebP images · sitemap"]
+        Islands["React islands<br/>cart · quiz · checkout<br/>contact form · booking"]
+    end
+
+    Astro --> HTML
+    Astro --> Islands
+
+    Islands -- "cart state" --> LS[("Nanostores<br/>+ localStorage")]
+    Islands -- "send message" --> EJS["EmailJS"]
+    Islands -- "embed" --> Cal["Calendly"]
+```
+
+Most of the site is plain HTML with no JavaScript. React loads only for the parts that need it, which keeps pages fast.
+
+## Program quiz flow
+
+```mermaid
+flowchart LR
+    A["Start quiz"] --> B["Personal info<br/>age · gender · height · weight"]
+    B --> C["Training experience"]
+    C --> D["Primary goal"]
+    D --> E["Days per week"]
+    E --> F["Zod validates<br/>each step"]
+    F --> G["Rules pick a program<br/>by goal + experience + days"]
+    G --> H["Result with<br/>the reason why"]
+    H --> I["Program page<br/>→ add to cart"]
+```
 
 ## Tech stack
 
-- [Astro](https://astro.build) 6 — static site generation
-- [React](https://react.dev) 19 — interactive UI islands
-- [Tailwind CSS](https://tailwindcss.com) 4 — styling
-- [Nanostores](https://github.com/nanostores/nanostores) — cart state
-- [EmailJS](https://www.emailjs.com/) — contact form delivery
-- [Calendly](https://calendly.com/) — session booking embed
-
-## Requirements
-
-- **Node.js** `>=22.12.0`
-- **npm** (comes with Node)
-
-## Getting started
-
-```sh
-# Install dependencies
-npm install
-
-# Copy env template and fill in your values
-cp .env.example .env
-
-# Start dev server at http://localhost:4321
-npm run dev
-```
-
-## Environment variables
-
-Create a `.env` file in the project root (see `.env.example`). All vars are prefixed with `PUBLIC_` so Astro exposes them to the client.
-
-| Variable | Required | Description |
-| --- | --- | --- |
-| `PUBLIC_CALENDLY_URL` | No | Calendly event URL. Falls back to `src/config/site.ts` if unset. |
-| `PUBLIC_EMAILJS_SERVICE_ID` | Yes (contact) | EmailJS service ID for the contact form |
-| `PUBLIC_EMAILJS_TEMPLATE_ID` | Yes (contact) | EmailJS template ID |
-| `PUBLIC_EMAILJS_PUBLIC_KEY` | Yes (contact) | EmailJS public key |
-
-`.env` is gitignored — never commit real keys. Set the same variables in your hosting provider before deploying.
-
-## Scripts
-
-| Command | Description |
+| Area | Tools |
 | --- | --- |
-| `npm run dev` | Local dev server at `localhost:4321` |
-| `npm run build` | Production build → `dist/` |
-| `npm run preview` | Serve the production build locally |
-| `npm run check` | TypeScript + Astro diagnostics |
-| `npm run lint` | ESLint |
-| `npm run format` | Prettier (write) |
-| `npm run compress-assets` | Compress oversized images in `src/assets/` |
-
-Optional: compress oversized images in `src/assets/` before committing:
-
-```sh
-npm run compress-assets
-```
-
-## Quality checks
-
-```sh
-npm run check    # TypeScript + Astro
-npm run lint     # ESLint
-npm run format   # Prettier (writes files)
-```
+| Framework | Astro 6 (static output), React 19 islands, TypeScript |
+| Styling | Tailwind CSS 4 |
+| State | Nanostores (cart) |
+| Forms and validation | React Hook Form, Zod |
+| Integrations | EmailJS (contact form), Calendly (booking) |
+| UI | Embla Carousel (transformation slider) |
+| Tooling | ESLint, Prettier, `astro check`, sharp |
+| Hosting | Netlify |
 
 ## Project structure
+
+The app lives in `personal-trainer/`. `netlify.toml` in the repo root tells Netlify to build from there.
 
 ```text
 personal-trainer/
@@ -76,48 +104,72 @@ personal-trainer/
 ├── scripts/             Build helpers (asset compression)
 ├── src/
 │   ├── assets/          Images processed by Astro
-│   ├── components/      Astro + React components by feature
-│   ├── config/          Site-wide config (Calendly URL)
+│   ├── components/      Astro and React components, grouped by feature
+│   ├── config/          Site-wide config (navigation, Calendly URL)
 │   ├── content/blog/    Markdown blog posts
-│   ├── data/          Product catalog (types, trainingPrograms, nutritionPlans)
+│   ├── data/            Product catalogue (types, training programs, nutrition plans)
 │   ├── layouts/         BaseLayout.astro
-│   ├── lib/             Utilities (blog, images, assessment)
+│   ├── lib/             Helpers (blog, images, quiz schema and recommendation)
 │   ├── pages/           File-based routes
 │   ├── store/           Cart state (Nanostores)
-│   └── styles/          Global CSS + Tailwind theme
+│   └── styles/          Global CSS and Tailwind theme
 ├── astro.config.mjs
 └── package.json
 ```
 
-## Main routes
+### Routes
 
-| Route | Purpose |
+| Route | Page |
 | --- | --- |
 | `/` | Home |
-| `/about` | About page |
-| `/programs`, `/programs/[id]` | Training program catalog + detail |
-| `/nutrition`, `/nutrition/[id]` | Nutrition plans + detail |
-| `/blog` | Blog listing, categories, pagination |
-| `/program-selector` | Training program assessment quiz |
+| `/about` | About |
+| `/programs`, `/programs/[id]` | Training programs and their detail pages |
+| `/nutrition`, `/nutrition/[id]` | Nutrition plans and their detail pages |
+| `/blog`, `/blog/[slug]` | Blog with categories and pagination |
+| `/program-selector` | Program quiz |
 | `/book` | Calendly booking |
-| `/contact` | Contact form (EmailJS) |
-| `/checkout` | Cart checkout (demo) |
+| `/contact` | Contact form |
+| `/checkout` | Checkout (demo) |
+
+## Running locally
+
+You need Node.js 22.12 or newer.
+
+```sh
+cd personal-trainer
+npm install
+cp .env.example .env    # fill in the values below
+npm run dev             # http://localhost:4321
+```
+
+### Environment variables
+
+All variables start with `PUBLIC_`, so Astro includes them in the browser bundle. EmailJS public keys are designed to be public.
+
+| Variable | Required | What it is |
+| --- | --- | --- |
+| `PUBLIC_EMAILJS_SERVICE_ID` | For the contact form | EmailJS service ID |
+| `PUBLIC_EMAILJS_TEMPLATE_ID` | For the contact form | EmailJS template ID |
+| `PUBLIC_EMAILJS_PUBLIC_KEY` | For the contact form | EmailJS public key |
+| `PUBLIC_CALENDLY_URL` | No | Calendly event URL. Defaults to the one in `src/config/site.ts` |
+
+### Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Dev server at `localhost:4321` |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run check` | TypeScript and Astro diagnostics |
+| `npm run lint` | ESLint |
+| `npm run format` | Prettier |
+| `npm run compress-assets` | Shrink oversized images in `src/assets/` |
+
+## Adding content
+
+- **Blog post:** add a Markdown file to `src/content/blog/` with `title`, `pubDate`, `description`, `author`, `image`, `category` and `tags` in the frontmatter. The build fails if a field is missing or the category is unknown. A cover image in `src/assets/` is found by its file name.
+- **Product:** edit `src/data/trainingPrograms.ts` or `src/data/nutritionPlans.ts`. New cover images in `src/assets/` are found automatically.
 
 ## Deployment
 
-The site builds to fully static HTML in `dist/`. Deploy to any static host (Netlify, Vercel, Cloudflare Pages, GitHub Pages, etc.).
-
-**Before going live:**
-
-1. Set your production domain in `astro.config.mjs` (`site` option).
-2. Update the sitemap URL in `public/robots.txt` to match.
-3. Set all `PUBLIC_*` environment variables on the host.
-4. Run `npm run build` and verify `npm run preview` locally.
-5. Test the contact form and Calendly embed on staging (ad blockers can block Calendly).
-
-Build output includes an auto-generated sitemap at `/sitemap-index.xml`.
-
-## Content
-
-- **Blog posts** — add markdown files under `src/content/blog/` with frontmatter (`title`, `pubDate`, `description`, `author`, `image`, `category`, `tags`). Cover images in `src/assets/` are auto-discovered by filename.
-- **Products** — edit `src/data/trainingPrograms.ts` or `nutritionPlans.ts`. New cover images in `src/assets/` are auto-discovered (no map edits needed).
+Netlify builds the site on every push to `main`, using the settings in `netlify.toml` (base `personal-trainer`, command `npm run build`, output `dist`, Node 22). Set the `PUBLIC_*` variables in Netlify under Site configuration → Environment variables. If the domain changes, update `site` in `astro.config.mjs` and the sitemap link in `public/robots.txt`.
