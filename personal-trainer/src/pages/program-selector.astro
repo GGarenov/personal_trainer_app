@@ -1,14 +1,27 @@
 ---
+import { getImage } from "astro:assets";
 import TrainingAssessment from "../components/assessment/TrainingAssessment";
 import { trainingPrograms } from "../data/products";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getProductCover } from "../lib/productImages";
 
-const programCovers = trainingPrograms.map((program) => ({
-  id: program.id,
-  name: program.name,
-  image: getProductCover(program.image).src,
-}));
+// Covers are shown at most 320px wide (the result card), so 640px covers
+// 2x screens. getImage() makes an optimised WebP at build time; passing the
+// raw `.src` would send the original full-size file to the browser.
+const programCovers = await Promise.all(
+  trainingPrograms.map(async (program) => {
+    const optimised = await getImage({
+      src: getProductCover(program.image),
+      width: 640,
+      format: "webp",
+    });
+    return {
+      id: program.id,
+      name: program.name,
+      image: optimised.src,
+    };
+  }),
+);
 ---
 
 <BaseLayout

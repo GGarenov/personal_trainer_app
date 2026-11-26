@@ -45,36 +45,72 @@ function isCart(value: unknown): value is Cart {
   );
 }
 
-function loadCart(): Cart {
-  if (typeof window === "undefined") {
-    return { items: [], total: 0 };
-  }
+export const EMPTY_CART: Cart = { items: [], total: 0 };
 
+function loadCart(): Cart {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { items: [], total: 0 };
+    if (!raw) return EMPTY_CART;
     const parsed: unknown = JSON.parse(raw);
-    return isCart(parsed) ? parsed : { items: [], total: 0 };
+    return isCart(parsed) ? parsed : EMPTY_CART;
   } catch {
-    return { items: [], total: 0 };
+    return EMPTY_CART;
   }
 }
 
 let persistTimer: ReturnType<typeof setTimeout> | undefined;
+let pendingCart: Cart | undefined;
+
+function writeCart(): void {
+  if (persistTimer) clearTimeout(persistTimer);
+  persistTimer = undefined;
+  if (!pendingCart) return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(pendingCart));
+  } catch {
+    // Storage full or blocked (private mode): the cart just isn't saved.
+  }
+  pendingCart = undefined;
+}
 
 function persistCart(cart: Cart): void {
   if (typeof window === "undefined") return;
 
+  pendingCart = cart;
   if (persistTimer) clearTimeout(persistTimer);
-  persistTimer = setTimeout(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-  }, PERSIST_DEBOUNCE_MS);
+  persistTimer = setTimeout(writeCart, PERSIST_DEBOUNCE_MS);
 }
 
-export const cartStore = atom<Cart>(loadCart());
+if (typeof window !== "undefined") {
+  // Save a pending change if the page is left within the debounce window.
+  window.addEventListener("pagehide", writeCart);
+}
+
+// Starts empty on both server and client so the HTML that React hydrates
+// matches the server render. The saved cart is loaded by hydrateCart(),
+// which useCart() calls after the component has mounted.
+export const cartStore = atom<Cart>(EMPTY_CART);
+
+let hydrated = false;
+
+export function hydrateCart(): void {
+  if (hydrated || typeof window === "undefined") return;
+  hydrated = true;
+  const saved = loadCart();
+  const current = cartStore.get();
+  // Keep anything added before the saved cart was loaded.
+  const items = [...saved.items];
+  for (const item of current.items) {
+    const existing = items.find((i) => i.id === item.id);
+    if (existing) existing.quantity += item.quantity;
+    else items.push(item);
+  }
+  cartStore.set({ items, total: recalculateTotal(items) });
+}
 
 cartStore.subscribe((cart) => {
-  persistCart(cart);
+  // Don't overwrite the saved cart with the empty initial value.
+  if (hydrated) persistCart(cart);
 });
 
 function setCart(items: CartItem[]): void {
@@ -127,12 +163,15 @@ export function updateQuantity(id: string, quantity: number): void {
 
   const cart = cartStore.get();
   setCart(
-    cart.items.map((item) =>
-      item.id === id ? { ...item, quantity } : item,
-    ),
+    cart.items.map((item) => (item.id === id ? { ...item, quantity } : item)),
   );
 }
 
 export function clearCart(): void {
+  // Count as loaded, so a later hydrateCart() can't bring the saved items back
+  // and the empty cart gets written to storage.
+  hydrated = true;
+  // A new object, not EMPTY_CART: the store may already hold EMPTY_CART, and
+  // set() with the same value doesn't notify, so nothing would be saved.
   cartStore.set({ items: [], total: 0 });
 }

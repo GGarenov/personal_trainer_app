@@ -4,13 +4,12 @@ import { formatPrice } from "../../lib/formatPrice";
 import { productImageMap } from "../../lib/productImages";
 import {
   cartDrawerOpen,
-  cartStore,
   closeCart,
-  getItemCount,
   removeItem,
   updateQuantity,
   type CartItem,
 } from "../../store/cart";
+import { getCartCount, useCart } from "../../store/useCart";
 
 const fallbackImage = productImageMap["image_four.jpg"];
 
@@ -124,10 +123,10 @@ function CartLineItem({ item }: { item: CartItem }) {
 
 export default function CartDrawer() {
   const isOpen = useStore(cartDrawerOpen);
-  const cart = useStore(cartStore);
+  const { cart } = useCart();
   const panelRef = useRef<HTMLElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const itemCount = getItemCount();
+  const itemCount = getCartCount(cart);
   const hasItems = cart.items.length > 0;
   const itemLabel = itemCount === 1 ? "1 ITEM" : `${itemCount} ITEMS`;
 
@@ -181,7 +180,9 @@ export default function CartDrawer() {
   return (
     <div
       className={`fixed inset-0 z-[95] transition-opacity duration-300 ${
-        isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        isOpen
+          ? "pointer-events-auto opacity-100"
+          : "pointer-events-none opacity-0"
       }`}
       aria-hidden={!isOpen}
     >

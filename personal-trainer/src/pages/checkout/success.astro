@@ -19,10 +19,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         stroke="currentColor"
         stroke-width="2"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M5 13l4 4L19 7"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"
+        ></path>
       </svg>
     </div>
 
@@ -30,11 +28,13 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       Thank You!
     </h1>
     <p class="mt-4 text-lg text-white/70">
-      Your demo order has been placed. This was a training exercise — no
-      payment was processed and no products were delivered.
+      Your demo order has been placed. This was a training exercise — no payment
+      was processed and no products were delivered.
     </p>
 
-    <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+    <div
+      class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+    >
       <a
         href="/programs"
         class="rounded bg-primary px-8 py-3 text-sm font-bold uppercase tracking-wider text-dark transition-colors hover:bg-primary/90"
@@ -50,3 +50,10 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
     </div>
   </main>
 </BaseLayout>
+
+<script>
+  import { clearCart } from "../../store/cart";
+
+  // The order is placed, so empty the cart.
+  clearCart();
+</script>

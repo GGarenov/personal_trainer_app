@@ -1,4 +1,6 @@
 ---
+import type { ImageMetadata } from "astro";
+import { getImage } from "astro:assets";
 import CategoryCards from "../components/home/CategoryCards.astro";
 import Hero from "../components/home/Hero.astro";
 import RecentBlogPosts from "../components/home/RecentBlogPosts.astro";
@@ -12,38 +14,60 @@ import beforeOne from "../assets/before_one.png";
 import beforeThree from "../assets/before_three.png";
 import beforeTwo from "../assets/before_two.png";
 
+// The slider is at most 896px wide (max-w-4xl) and each photo fills about half
+// of it on desktop or the full width on mobile, so 880px is enough. The raw
+// .src would send the original PNGs (200–430 KB each) to the browser.
+async function optimise(image: ImageMetadata) {
+  const result = await getImage({
+    src: image,
+    width: Math.min(image.width, 880),
+    format: "webp",
+  });
+  return {
+    src: result.src,
+    width: Number(result.attributes.width),
+    height: Number(result.attributes.height),
+  };
+}
+
+const [b1, a1, b2, a2, b3, a3] = await Promise.all(
+  [beforeOne, afterOne, beforeTwo, afterTwo, beforeThree, afterThree].map(
+    optimise,
+  ),
+);
+
 const slides = [
   {
-    before: beforeOne.src,
-    beforeWidth: beforeOne.width,
-    beforeHeight: beforeOne.height,
-    after: afterOne.src,
-    afterWidth: afterOne.width,
-    afterHeight: afterOne.height,
+    before: b1.src,
+    beforeWidth: b1.width,
+    beforeHeight: b1.height,
+    after: a1.src,
+    afterWidth: a1.width,
+    afterHeight: a1.height,
     quote:
       "I never thought I could enjoy the gym. George's program changed everything — I'm stronger and more confident than ever.",
     name: "John Smith",
     result: "Lost 15 kg",
   },
   {
-    before: beforeTwo.src,
-    beforeWidth: beforeTwo.width,
-    beforeHeight: beforeTwo.height,
-    after: afterTwo.src,
-    afterWidth: afterTwo.width,
-    afterHeight: afterTwo.height,
+    before: b2.src,
+    beforeWidth: b2.width,
+    beforeHeight: b2.height,
+    after: a2.src,
+    afterWidth: a2.width,
+    afterHeight: a2.height,
     quote:
       "I gained muscle without living in the gym. The programming is smart, efficient, and actually sustainable.",
     name: "David Mereth",
     result: "Lost 35 kg",
   },
   {
-    before: beforeThree.src,
-    beforeWidth: beforeThree.width,
-    beforeHeight: beforeThree.height,
-    after: afterThree.src,
-    afterWidth: afterThree.width,
-    afterHeight: afterThree.height,
+    before: b3.src,
+    beforeWidth: b3.width,
+    beforeHeight: b3.height,
+    after: a3.src,
+    afterWidth: a3.width,
+    afterHeight: a3.height,
     quote:
       "The nutrition plan was simple to follow and the results spoke for themselves. Best investment I've made in myself.",
     name: "Maria Lopez",

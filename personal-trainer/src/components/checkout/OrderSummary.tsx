@@ -1,22 +1,22 @@
 import { useEffect } from "react";
-import { useStore } from "@nanostores/react";
 import { formatPrice } from "../../lib/formatPrice";
-import { cartStore } from "../../store/cart";
+import { useCart } from "../../store/useCart";
 
 export default function OrderSummary() {
-  const cart = useStore(cartStore);
+  const { cart, ready } = useCart();
   const hasItems = cart.items.length > 0;
 
   useEffect(() => {
-    if (!hasItems) {
+    // Wait until the saved cart is loaded, or every visit would redirect.
+    if (ready && !hasItems) {
       window.location.replace("/programs");
     }
-  }, [hasItems]);
+  }, [ready, hasItems]);
 
   if (!hasItems) {
     return (
       <div className="rounded-lg border border-white/10 bg-surface p-8 text-center text-white/60">
-        Redirecting to programs…
+        {ready ? "Redirecting to programs…" : "Loading your order…"}
       </div>
     );
   }

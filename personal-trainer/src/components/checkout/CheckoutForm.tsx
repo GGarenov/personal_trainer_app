@@ -4,7 +4,6 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
-import { clearCart } from "../../store/cart";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const EXPIRY_PATTERN = /^(0[1-9]|1[0-2])\/\d{2}$/;
@@ -180,7 +179,8 @@ export default function CheckoutForm() {
 
     // TODO: Replace with Stripe/Lemon Squeezy when going live.
     // Demo only — card data is never sent anywhere.
-    clearCart();
+    // The success page empties the cart. Emptying it here would make
+    // OrderSummary redirect to /programs before this navigation finishes.
     window.location.href = "/checkout/success";
   };
 

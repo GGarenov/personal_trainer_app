@@ -1,9 +1,9 @@
-import { useStore } from "@nanostores/react";
-import { cartStore, openCart } from "../../store/cart";
+import { openCart } from "../../store/cart";
+import { getCartCount, useCart } from "../../store/useCart";
 
 export default function CartIcon() {
-  const cart = useStore(cartStore);
-  const count = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+  const { cart } = useCart();
+  const count = getCartCount(cart);
 
   return (
     <button
