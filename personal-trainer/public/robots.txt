@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://personaltrainergeorge.netlify.app/sitemap-index.xml
+Sitemap: https://beantrainingcoach.netlify.app/sitemap-index.xml

@@ -5,8 +5,8 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
-// Update this to your real domain before deploying
-const SITE = "https://personaltrainergeorge.netlify.app/";
+// Public URL of the site, used for the sitemap and canonical links
+const SITE = "https://beantrainingcoach.netlify.app/";
 
 // https://astro.build/config
 export default defineConfig({
